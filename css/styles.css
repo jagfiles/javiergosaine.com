@@ -1,0 +1,38 @@
+body {
+  font-family: system-ui;
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.hero {
+  padding: 80px 20px;
+  text-align: center;
+  background: #020617;
+}
+
+h1 {
+  font-size: 42px;
+  margin: 0;
+}
+
+.subtitle {
+  color: #94a3b8;
+}
+
+section {
+  max-width: 900px;
+  margin: auto;
+  padding: 60px 20px;
+}
+
+.project {
+  background: #020617;
+  padding: 20px;
+  border: 1px solid #1e293b;
+  margin-bottom: 20px;
+}
+
+a {
+  color: #38bdf8;
+}

@@ -1,13 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Hola</title>
+  <meta charset="UTF-8">
+  <title>Javier Gosaine | Full Stack Developer</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<style>
-  body { font-family: Arial; text-align: center; }
-</style>
 <body>
-  <h1>Hola mundo</h1>
-  <p>Mi portfolio</p>
+
+<header class="hero">
+  <h1>Javier Gosaine</h1>
+  <p>Full Stack Developer</p>
+  <p class="subtitle">
+    Desarrollo de sistemas escalables en salud, APIs y aplicaciones offline-first
+  </p>
+</header>
+
+<section class="about">
+  <h2>Sobre mí</h2>
+  <p>
+    Desarrollador con experiencia en diseño e implementación de sistemas complejos,
+    especialmente en el dominio de salud. Trabajo en backend con Ruby on Rails y
+    desarrollo aplicaciones móviles y web con enfoque en rendimiento, escalabilidad
+    y experiencia de usuario.
+  </p>
+</section>
+
+<section class="projects">
+  <h2>Proyectos seleccionados</h2>
+
+  <div class="project">
+    <h3>Yike — Plataforma para agentes sanitarios</h3>
+    <p>
+      Aplicación móvil offline-first para relevamiento territorial,
+      diseñada para operar en zonas sin conectividad.
+    </p>
+    <ul>
+      <li>Arquitectura offline-first con sincronización</li>
+      <li>Georreferenciación de datos</li>
+      <li>Backend con FastAPI + PostgreSQL</li>
+    </ul>
+    <a href="projects/yike.html">Ver caso completo</a>
+  </div>
+
+  <div class="project">
+    <h3>myLocal — Plataforma para restaurantes</h3>
+    <p>
+      Sistema multi-tenant para gestión de pedidos, reservas y menús digitales vía QR.
+    </p>
+    <ul>
+      <li>Arquitectura multi-tenant en Rails</li>
+      <li>Panel administrativo + frontend público</li>
+      <li>Optimización de flujos de pedido</li>
+    </ul>
+    <a href="projects/mylocal.html">Ver caso completo</a>
+  </div>
+
+  <div class="project">
+    <h3>Sistema de información clínica</h3>
+    <p>
+      Integración de datos clínicos estructurados y APIs para interoperabilidad.
+    </p>
+    <ul>
+      <li>Modelado de datos clínicos complejos</li>
+      <li>APIs REST para interoperabilidad</li>
+      <li>Trazabilidad de pacientes</li>
+    </ul>
+    <a href="projects/salud.html">Ver caso completo</a>
+  </div>
+
+</section>
+
+<section class="contact">
+  <h2>Contacto</h2>
+  <p>Email: tuemail@gmail.com</p>
+  <p>GitHub: github.com/jagfiles</p>
+</section>
+
 </body>
 </html>
