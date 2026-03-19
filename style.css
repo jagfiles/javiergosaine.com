@@ -312,7 +312,7 @@ section { padding: 6rem 5vw; position: relative; }
 
 /* ===== CONTACT ===== */
 #contact { text-align: left; }
-#contact .section-title { text-align: left; }
+#contact .section-title { text-align: center; }
 #contact .section-title em {
   font-style: normal;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -436,4 +436,19 @@ footer {
 @media(max-width:600px){
   .nav-links { display: none; }
   .hero-stats { gap: 1.5rem; }
+}
+
+
+#contact {
+  text-align: center;
+}
+
+#contact .section-title,
+#contact .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-layout {
+  margin: 0 auto;
 }
