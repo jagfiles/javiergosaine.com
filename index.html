@@ -1,370 +1,392 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark" data-lang="es">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Javier Gosaine — Full Stack Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Project image preview */
-    .project-img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 1.2rem;
-      border: 1px solid var(--border);
-      display: block;
-      background: var(--surface);
-    }
-    .project-link {
-      display: inline-flex; align-items: center; gap: .4rem;
-      margin-top: 1rem;
-      color: var(--accent);
-      font-size: .82rem; font-weight: 600;
-      text-decoration: none;
-      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-      border-radius: 6px;
-      padding: .3rem .8rem;
-      transition: background .2s;
-    }
-    .project-link:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-    .project-link svg { flex-shrink: 0; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Javier Gosaine — Desarrollo software a medida para clínicas, estudios jurídicos, comercios y pymes. Soluciones web y mobile que reemplazan procesos manuales y Excel."/>
+<title>Javier Gosaine · Desarrollo de Software para Pymes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,900;1,9..144,300;1,9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/styles.css"/>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#"><span>JG</span></a>
-  <div class="nav-controls">
-    <div class="nav-links">
-      <a href="#about"  data-es="Sobre mí"   data-en="About">Sobre mí</a>
-      <a href="#projects" data-es="Proyectos" data-en="Projects">Proyectos</a>
-      <a href="#experience" data-es="Experiencia" data-en="Experience">Experiencia</a>
-      <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
-    </div>
-    <button class="toggle-btn" id="langBtn" onclick="toggleLang()">EN</button>
-    <button class="toggle-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
+<!-- ══════════════════════════════════
+     NAV
+══════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Javier Gosaine<span>.</span> <sup>dev</sup></a>
+  <ul class="nav-links">
+    <li><a href="#servicios" data-i18n="nav.services">Servicios</a></li>
+    <li><a href="#rubros"    data-i18n="nav.sectors">Rubros</a></li>
+    <li><a href="#proceso"   data-i18n="nav.process">Proceso</a></li>
+    <li><a href="#contacto" class="nav-cta" data-i18n="nav.cta">Hablemos</a></li>
+  </ul>
+  <div class="controls">
+    <button class="ctrl-btn" id="themeBtn" aria-label="Toggle theme">
+      <svg id="themeIcon" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="6.5" cy="6.5" r="3"/>
+        <path d="M6.5 1v1.5M6.5 10.5V12M1 6.5h1.5M10.5 6.5H12M2.6 2.6l1.1 1.1M9.3 9.3l1.1 1.1M9.3 3.7l-1.1 1.1M3.8 9.2l-1.1 1.1"/>
+      </svg>
+      <span id="themeLbl">Claro</span>
+    </button>
+    <div class="ctrl-sep"></div>
+    <button class="ctrl-btn active" id="langEs" onclick="setLang('es')">ES</button>
+    <button class="ctrl-btn"        id="langEn" onclick="setLang('en')">EN</button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-glow"></div>
-  <div class="hero-tag" data-es="Disponible para proyectos" data-en="Available for projects">Disponible para proyectos</div>
-  <h1>
-    <span data-es="Full Stack" data-en="Full Stack">Full Stack</span><br>
-    <em data-es="Developer" data-en="Developer">Developer</em>
-  </h1>
-  <p class="hero-sub">
-    Desarrollo sistemas a medida que optimizan tu negocio, automatizan procesos y aumentan tus ventas.
-  </p>
-  <div class="hero-cta">
-    <a href="#projects" class="btn-primary" data-es="Ver proyectos →" data-en="View projects →">Ver proyectos →</a>
-    <a href="#contact" class="btn-outline" data-es="Solicitar Asesoramiento" data-en="Get a Consultation">Solicitar asesoramiento</a>
-  </div>
-  <div class="hero-stats">
-    <div>
-      <div class="stat-num">5+</div>
-      <div class="stat-label" data-es="Años de experiencia" data-en="Years experience">Años de experiencia</div>
-    </div>
-    <div>
-      <div class="stat-num">15+</div>
-      <div class="stat-label" data-es="Proyectos entregados" data-en="Projects delivered">Proyectos entregados</div>
-    </div>
-    <div>
-      <div class="stat-num">3</div>
-      <div class="stat-label" data-es="Dominios clave" data-en="Key domains">Dominios clave</div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-grid">
-    <div class="about-text">
-      <div class="section-label" data-es="Sobre mí" data-en="About me">Sobre mí</div>
-      <h2 class="section-title" data-es="Construyo software que importa" data-en="I build software that matters">Construyo software que importa</h2>
-      <p data-es="Soy Javier Gosaine, desarrollador Full Stack con más de 5 años de experiencia diseñando e implementando sistemas complejos. Me especializo en soluciones a medida que combinan backend robusto con interfaces de usuario cuidadas."
-         data-en="I'm Javier Gosaine, a Full Stack developer with over 5 years of experience designing and implementing complex systems. I specialize in custom solutions combining robust backend with polished user interfaces.">
-        Soy <strong class="myname">Javier Gosaine</strong>, desarrollador Full Stack con más de 5 años de experiencia diseñando e implementando sistemas complejos. Me especializo en soluciones a medida que combinan backend robusto con interfaces de usuario cuidadas.
-      </p>
-      <p data-es="Trabajo desde diseño de arquitectura hasta deploy, con especial foco en performance, escalabilidad y experiencia de usuario. He desarrollado plataformas educativas, sistemas sanitarios y aplicaciones de gestión para distintos sectores."
-         data-en="I work from architecture design to deployment, with a focus on performance, scalability and user experience. I've built educational platforms, health systems, and management applications across multiple industries.">
-        Trabajo desde diseño de arquitectura hasta deploy, con especial foco en performance, escalabilidad y experiencia de usuario. He desarrollado plataformas educativas, sistemas sanitarios y aplicaciones de gestión para distintos sectores.
-      </p>
-    </div>
-    <div>
-      <div class="section-label" data-es="Tecnologías" data-en="Technologies">Tecnologías</div>
-      <div class="skills-cloud" style="margin-top:1rem">
-        <span class="skill-tag highlight">Ruby on Rails</span>
-        <span class="skill-tag highlight">React</span>
-        <span class="skill-tag highlight">PostgreSQL</span>
-        <span class="skill-tag">JavaScript</span>
-        <span class="skill-tag">TypeScript</span>
-        <span class="skill-tag">FastAPI</span>
-        <span class="skill-tag">Python</span>
-        <span class="skill-tag">REST APIs</span>
-        <span class="skill-tag">Docker</span>
-        <span class="skill-tag">Redis</span>
-        <span class="skill-tag">Sidekiq</span>
-        <span class="skill-tag">Git</span>
-        <span class="skill-tag">HTML/CSS</span>
-        <span class="skill-tag">Hotwire</span>
-        <span class="skill-tag">Tailwind CSS</span>
-        <span class="skill-tag">Linux</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="section-label" data-es="Proyectos" data-en="Projects">Proyectos</div>
-  <h2 class="section-title" data-es="Trabajo seleccionado" data-en="Selected work">Trabajo seleccionado</h2>
-  <p class="section-desc" data-es="Proyectos que demuestran mi capacidad para resolver problemas reales con tecnología." data-en="Projects that demonstrate my ability to solve real problems with technology.">
-    Proyectos que demuestran mi capacidad para resolver problemas reales con tecnología.
-  </p>
-  <div class="projects-grid">
-
-    <div class="project-card">
-      <div class="project-icon">🎓</div>
-      <div class="project-title" data-es="Plataforma Educativa" data-en="Educational Platform">Plataforma Educativa</div>
-      <p class="project-desc" data-es="Sistema completo de gestión de aprendizaje con aulas virtuales, seguimiento de progreso, evaluaciones y panel administrativo multi-rol."
-         data-en="Complete learning management system with virtual classrooms, progress tracking, assessments and multi-role admin panel.">
-        Sistema completo de gestión de aprendizaje con aulas virtuales, seguimiento de progreso, evaluaciones y panel administrativo multi-rol.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Rails</span>
-        <span class="project-tag">React</span>
-        <span class="project-tag">PostgreSQL</span>
-        <span class="project-tag">Sidekiq</span>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-icon">⚽</div>
-      <div class="project-title" data-es="Reserva de Canchas de Fútbol" data-en="Football Court Booking">Reserva de Canchas de Fútbol</div>
-      <p class="project-desc" data-es="Plataforma de reservas en tiempo real para canchas de fútbol con gestión de turnos, pagos online y notificaciones automáticas."
-         data-en="Real-time booking platform for football courts with shift management, online payments and automatic notifications.">
-        Plataforma de reservas en tiempo real para canchas de fútbol con gestión de turnos, pagos online y notificaciones automáticas.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Rails</span>
-        <span class="project-tag">Hotwire</span>
-        <span class="project-tag">PostgreSQL</span>
-        <span class="project-tag">Redis</span>
-      </div>
-    </div>
-
-    <!-- SALUD CHUBUT — con imagen y link -->
-    <div class="project-card">
-      <div class="project-icon">🏥</div>
-      <div class="project-title" data-es="Sistema Sanitario — Sec. de Salud Chubut" data-en="Healthcare System — Health Secretariat Chubut">Sistema Sanitario — Sec. de Salud Chubut</div>
-      <p class="project-desc"
-         data-es="Plataforma web institucional de la Secretaría de Salud de la Provincia de Chubut. Gestión de contenidos, herramientas sanitarias, noticias y servicios para toda la provincia."
-         data-en="Institutional web platform for the Chubut Province Health Secretariat. Content management, health tools, news and services for the entire province.">
-        Plataforma web institucional de la Secretaría de Salud de la Provincia de Chubut. Gestión de contenidos, herramientas sanitarias, noticias y servicios para toda la provincia.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Rails</span>
-        <span class="project-tag">PostgreSQL</span>
-        <span class="project-tag">REST</span>
-        <span class="project-tag">Gobierno</span>
-      </div>
-      <a href="https://secretariadesalud.chubut.gov.ar/" class="project-link" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span data-es="Ver sitio" data-en="View site">Ver sitio</span>
-      </a>
-    </div>
-
-    <!-- HUENU — sistema de agentes con imagen y link -->
-    <div class="project-card">
-      <div class="project-icon">👩‍⚕️</div>
-      <div class="project-title" data-es="Huenu — Sistema de Agentes Sanitarios" data-en="Huenu — Health Agents System">Huenu — Sistema de Agentes Sanitarios</div>
-      <p class="project-desc"
-         data-es="Sistema web para la gestión y capacitación de agentes sanitarios de la provincia de Chubut. Incluye herramientas de triage pediátrico y adulto, test de habilidades y módulos de formación continua."
-         data-en="Web system for managing and training health agents in Chubut province. Includes pediatric and adult triage tools, skills assessments and ongoing training modules.">
-        Sistema web para la gestión y capacitación de agentes sanitarios de la provincia de Chubut. Incluye herramientas de triage pediátrico y adulto, test de habilidades y módulos de formación continua.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Rails</span>
-        <span class="project-tag">PostgreSQL</span>
-        <span class="project-tag">Salud</span>
-        <span class="project-tag">Gobierno</span>
-      </div>
-      <a href="https://huenu.chubut.gov.ar" class="project-link" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span data-es="Ver sitio" data-en="View site">Ver sitio</span>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <div class="project-icon">🍽️</div>
-      <div class="project-title">myLocal — Restaurantes</div>
-      <p class="project-desc"
-         data-es="Sistema multi-tenant para gestión de pedidos, reservas y menús digitales vía QR. Panel administrativo + frontend público optimizado."
-         data-en="Multi-tenant system for orders, bookings and QR digital menus. Admin panel and optimized public frontend.">
-        Sistema multi-tenant para gestión de pedidos, reservas y menús digitales vía QR. Panel administrativo + frontend público optimizado.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Rails</span>
-        <span class="project-tag">Multi-tenant</span>
-        <span class="project-tag">React</span>
-        <span class="project-tag">QR</span>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-icon">🚀</div>
-      <div class="project-title" data-es="Freelance & Consultoría" data-en="Freelance & Consulting">Freelance & Consultoría</div>
-      <p class="project-desc"
-         data-es="Más de 5 años desarrollando proyectos freelance para clientes de distintos sectores. Desde MVPs hasta sistemas en producción con miles de usuarios."
-         data-en="Over 5 years delivering freelance projects for clients across different sectors. From MVPs to production systems with thousands of users.">
-        Más de 5 años desarrollando proyectos freelance para clientes de distintos sectores. Desde MVPs hasta sistemas en producción con miles de usuarios.
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Full Stack</span>
-        <span class="project-tag">Arquitectura</span>
-        <span class="project-tag">MVP</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-label" data-es="Experiencia" data-en="Experience">Experiencia</div>
-  <h2 class="section-title" data-es="Trayectoria profesional" data-en="Professional journey">Trayectoria profesional</h2>
-  <div style="max-width:700px">
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-date" data-es="2022 — Presente" data-en="2022 — Present">2022 — Presente</div>
-        <div class="timeline-role" data-es="Desarrollador Full Stack Freelance" data-en="Freelance Full Stack Developer">Desarrollador Full Stack Freelance</div>
-        <div class="timeline-company" data-es="Proyectos independientes — Remoto" data-en="Independent projects — Remote">Proyectos independientes — Remoto</div>
-        <p class="timeline-desc"
-           data-es="Diseño e implementación de sistemas a medida para clientes en salud, educación y gastronomía. Stack principal: Rails + React + PostgreSQL."
-           data-en="Design and implementation of custom systems for clients in healthcare, education, and hospitality. Main stack: Rails + React + PostgreSQL.">
-          Diseño e implementación de sistemas a medida para clientes en salud, educación y gastronomía. Stack principal: Rails + React + PostgreSQL.
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hi">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow" data-i18n="hero.label">Desarrollo de Software · Argentina · Remoto</div>
+        <h1 data-i18n="hero.h1">Software que resuelve<br><em>problemas reales</em><br>de tu negocio.</h1>
+        <p class="hero-desc" data-i18n="hero.desc">
+          Desarrollo <strong>sistemas web y aplicaciones a medida</strong> para clínicas, estudios jurídicos, comercios y pymes que quieren dejar de depender de Excel, WhatsApp y procesos manuales.
         </p>
+        <div class="hero-btns">
+          <a href="#contacto" class="btn btn-acc" data-i18n="hero.cta1">Solicitar presupuesto →</a>
+          <a href="#servicios" class="btn btn-ghost" data-i18n="hero.cta2">Ver servicios</a>
+        </div>
       </div>
-      <div class="timeline-item">
-        <div class="timeline-date" data-es="2020 — 2022" data-en="2020 — 2022">2020 — 2022</div>
-        <div class="timeline-role" data-es="Desarrollador Full Stack" data-en="Full Stack Developer">Desarrollador Full Stack</div>
-        <div class="timeline-company" data-es="Proyectos de salud y plataformas web" data-en="Healthcare and web platform projects">Proyectos de salud y plataformas web</div>
-        <p class="timeline-desc"
-           data-es="Desarrollo de aplicaciones en el dominio sanitario con foco en interoperabilidad, modelado de datos clínicos y APIs REST."
-           data-en="Development of healthcare applications focused on interoperability, clinical data modeling and REST APIs.">
-          Desarrollo de aplicaciones en el dominio sanitario con foco en interoperabilidad, modelado de datos clínicos y APIs REST.
-        </p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date" data-es="2019 — 2020" data-en="2019 — 2020">2019 — 2020</div>
-        <div class="timeline-role" data-es="Desarrollador Backend" data-en="Backend Developer">Desarrollador Backend</div>
-        <div class="timeline-company" data-es="Primeros proyectos profesionales" data-en="Early professional projects">Primeros proyectos profesionales</div>
-        <p class="timeline-desc"
-           data-es="Inicio de carrera profesional en desarrollo web. Primeros proyectos con Ruby on Rails y bases de datos relacionales."
-           data-en="Beginning of professional career in web development. First projects with Ruby on Rails and relational databases.">
-          Inicio de carrera profesional en desarrollo web. Primeros proyectos con Ruby on Rails y bases de datos relacionales.
-        </p>
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <div class="avatar-placeholder">
+            <!-- Reemplazá por <img src="assets/img/foto.jpg" alt="Javier Gosaine"/> cuando tengas tu foto -->
+            <svg width="28" height="28" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="22" cy="16" r="8"/><path d="M6 40c0-8.8 7.2-16 16-16s16 7.2 16 16"/>
+            </svg>
+          </div>
+          <div>
+            <div class="hero-card-name">Javier Gosaine</div>
+            <div class="hero-card-role">Full Stack Developer · Argentina</div>
+            <div class="hero-badge">Disponible</div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-n">+20</div><div class="hero-stat-l">Proyectos entregados</div></div>
+          <div class="hero-stat"><div class="hero-stat-n">8+</div><div class="hero-stat-l">Años de experiencia</div></div>
+          <div class="hero-stat"><div class="hero-stat-n">100%</div><div class="hero-stat-l">Responsive</div></div>
+          <div class="hero-stat"><div class="hero-stat-n">⚡</div><div class="hero-stat-l">Alta performance</div></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-label" data-es="Contacto" data-en="Contact">Contacto</div>
+<!-- ══════════════════════════════════
+     TICKER
+══════════════════════════════════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="t-track">
+    <span>Sistemas web</span><span class="dot">✦</span>
+    <span>Apps mobile</span><span class="dot">✦</span>
+    <span>Clínicas y consultorios</span><span class="dot">✦</span>
+    <span>Estudios jurídicos</span><span class="dot">✦</span>
+    <span>Comercios y mercados</span><span class="dot">✦</span>
+    <span>Digitalización de procesos</span><span class="dot">✦</span>
+    <span>Full Stack · Node · React</span><span class="dot">✦</span>
+    <span>Deploy en producción</span><span class="dot">✦</span>
+    <span>Sistemas web</span><span class="dot">✦</span>
+    <span>Apps mobile</span><span class="dot">✦</span>
+    <span>Clínicas y consultorios</span><span class="dot">✦</span>
+    <span>Estudios jurídicos</span><span class="dot">✦</span>
+    <span>Comercios y mercados</span><span class="dot">✦</span>
+    <span>Digitalización de procesos</span><span class="dot">✦</span>
+    <span>Full Stack · Node · React</span><span class="dot">✦</span>
+    <span>Deploy en producción</span><span class="dot">✦</span>
+  </div>
+</div>
 
-  <h2 class="section-title">
-    <span data-es="Impulsá tu " data-en="Boost your ">Impulsá tu </span>
-    <em data-es="negocio con tecnología" data-en="business with technology">negocio con tecnología</em>
-  </h2>
-
-  <p class="section-desc"
-    data-es="Ayudo a comercios, estudios y pymes a digitalizar procesos, mejorar su gestión y aumentar sus ventas con soluciones a medida."
-    data-en="I help businesses, law firms and SMEs streamline processes, improve management and increase revenue with tailored solutions.">
-    Ayudo a comercios, estudios y pymes a digitalizar procesos, mejorar su gestión y aumentar sus ventas con soluciones a medida.
-  </p>
-  <div class="contact-layout">
-    <!-- FORM -->
-    <div class="contact-form-card">
-      <h3 data-es="Enviame un mensaje" data-en="Send me a message">Enviame un mensaje</h3>
-      <div class="form-row">
-        <input class="form-input" type="text" placeholder="Tu nombre" data-ph-es="Tu nombre" data-ph-en="Your name" />
-        <input class="form-input" type="email" placeholder="Tu email" data-ph-es="Tu email" data-ph-en="Your email" />
+<!-- ══════════════════════════════════
+     PROBLEMS
+══════════════════════════════════ -->
+<section class="problems" id="problemas">
+  <div class="w">
+    <div class="prob-inner">
+      <div data-r>
+        <span class="s-label" data-i18n="prob.label">¿Te identificás?</span>
+        <h2 class="s-title" data-i18n="prob.title">Estos son los<br><em>problemas</em><br>que resuelvo.</h2>
+        <ul class="prob-list">
+          <li>Tu negocio depende de planillas de Excel que ya nadie entiende</li>
+          <li>Coordinás turnos o pedidos por WhatsApp y algo siempre se pierde</li>
+          <li>No tenés visibilidad en tiempo real de tu stock, agenda o caja</li>
+          <li>Tus empleados hacen trabajo manual que podría automatizarse</li>
+          <li>Cada vez que crece el negocio, el caos crece también</li>
+          <li>Tenés datos valiosos dispersos en correos, cuadernos y hojas</li>
+          <li>Querés digitalizarte pero no sabés por dónde empezar</li>
+        </ul>
       </div>
-      <input class="form-input" type="text" placeholder="Tu empresa (opcional)" data-ph-es="Tu empresa (opcional)" data-ph-en="Your company (optional)" style="width:100%" />
-      <textarea class="form-input" placeholder="Contame sobre tu proyecto..." data-ph-es="Contame sobre tu proyecto..." data-ph-en="Tell me about your project..."></textarea>
-      <button class="btn-send" data-es="Enviar mensaje" data-en="Send message">Enviar mensaje</button>
-    </div>
-
-    <!-- INFO CARDS -->
-    <div class="contact-info">
-      <div class="contact-info-card">
-        <div class="contact-info-icon icon-wa">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      <div data-r>
+        <div class="prob-card">
+          <h3 data-i18n="prob.card.h">Si tu negocio depende de Excel, puedo ayudarte a escalarlo.</h3>
+          <p data-i18n="prob.card.p">Construyo sistemas que centralizan la información, automatizan lo repetitivo y te dan control real sobre tu operación. Sin humo, sin costos innecesarios.</p>
+          <a href="#contacto" class="btn btn-inv" data-i18n="prob.card.btn">Contame tu caso →</a>
         </div>
-        <div class="contact-info-body">
-          <div class="contact-info-title">WhatsApp</div>
-          <div class="contact-info-sub" data-es="Comunicate directamente conmigo" data-en="Contact me directly">Comunicate directamente conmigo</div>
-          <a href="https://wa.me/5492804711521" class="contact-info-link" target="_blank" data-es="Chatear ahora" data-en="Chat now">Chatear ahora</a>
-        </div>
-      </div>
-      <div class="contact-info-card">
-        <div class="contact-info-icon icon-mail">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        </div>
-        <div class="contact-info-body">
-          <div class="contact-info-title">Email</div>
-          <div class="contact-info-sub">jgosaine@gmail.com</div>
-        </div>
-      </div>
-      <div class="contact-info-card">
-        <div class="contact-info-icon icon-loc">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <div class="contact-info-body">
-          <div class="contact-info-title" data-es="Ubicación" data-en="Location">Ubicación</div>
-          <div class="contact-info-sub" data-es="Patagonia, Argentina" data-en="Patagonia, Argentina">Chubut, Argentina</div>
-          <div class="contact-info-sub" data-es="Trabajo de forma remota" data-en="Working remotely">Trabajo de forma remota</div>
-        </div>
-      </div>
-      <div class="contact-info-card">
-        <div class="contact-info-icon icon-tel">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 5.92 5.92l.87-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="contact-info-body">
-          <div class="contact-info-title" data-es="Teléfono" data-en="Phone">Teléfono</div>
-          <div class="contact-info-sub">+54 9 280471xxxx</div>
-        </div>
-      </div>
-      <div class="social-links">
-        <a href="https://github.com/jagfiles" class="social-link" title="GitHub" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-        </a>
-        <a href="https://linkedin.com/in/javiergosaine" class="social-link" title="LinkedIn" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-        <a href="https://twitter.com/javiergosaine" class="social-link" title="Twitter / X" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
-        <a href="https://wa.me/549XXXXXXXXXX" class="social-link" title="WhatsApp" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-        </a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ══════════════════════════════════
+     SERVICES
+══════════════════════════════════ -->
+<section id="servicios">
+  <div class="w">
+    <div class="srv-header">
+      <div data-r>
+        <span class="s-label" data-i18n="srv.label">Servicios</span>
+        <h2 class="s-title" data-i18n="srv.title">Qué construyo<br>para vos.</h2>
+      </div>
+      <p class="s-lead" data-r data-i18n="srv.lead">No vendo tecnología. Vendo resultados: menos tiempo perdido, más control, mejores decisiones. La tecnología es el medio.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv" data-r>
+        <span class="srv-num">01</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="32" height="22" rx="2"/><path d="M4 16h32M12 30v4M28 30v4M8 34h24"/><path d="M12 12h4M12 20h16M12 24h10"/></svg>
+        <h3>Sistemas web a medida</h3>
+        <p>Panel de administración, gestión de clientes, turnos, stock o facturación. Accesible desde cualquier dispositivo, sin instalar nada.</p>
+        <div class="srv-tags"><span>CRM</span><span>Turnos</span><span>Stock</span><span>Facturación</span></div>
+      </div>
+      <div class="srv" data-r>
+        <span class="srv-num">02</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="12" y="2" width="16" height="36" rx="3"/><circle cx="20" cy="33" r="1.5"/><path d="M16 6h8"/></svg>
+        <h3>Aplicaciones mobile</h3>
+        <p>Apps para Android e iOS que permiten a tu equipo o clientes operar desde el celular: datos, consultas y notificaciones en tiempo real.</p>
+        <div class="srv-tags"><span>Android</span><span>iOS</span><span>React Native</span></div>
+      </div>
+      <div class="srv" data-r>
+        <span class="srv-num">03</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 4L4 12v16l16 8 16-8V12L20 4z"/><path d="M20 4v28M4 12l16 8 16-8"/></svg>
+        <h3>Automatización de procesos</h3>
+        <p>Identifico las tareas que consumen tiempo de tu equipo y las convierto en flujos automáticos: notificaciones, reportes, integraciones.</p>
+        <div class="srv-tags"><span>APIs</span><span>Workflows</span><span>Notificaciones</span></div>
+      </div>
+      <div class="srv" data-r>
+        <span class="srv-num">04</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="20" cy="20" r="16"/><path d="M20 10v10l6 4"/></svg>
+        <h3>Sitios web profesionales</h3>
+        <p>Tu presencia digital: rápida, clara y orientada a que tus clientes entiendan qué hacés y te contacten. Landing pages y sitios institucionales.</p>
+        <div class="srv-tags"><span>Landing</span><span>SEO</span><span>Vercel</span></div>
+      </div>
+      <div class="srv" data-r>
+        <span class="srv-num">05</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="14" height="14" rx="2"/><rect x="22" y="4" width="14" height="14" rx="2"/><rect x="4" y="22" width="14" height="14" rx="2"/><rect x="22" y="22" width="14" height="14" rx="2"/></svg>
+        <h3>Dashboards y reportes</h3>
+        <p>Visualizá ventas, agenda, rendimiento y stock en tiempo real. Tomás mejores decisiones cuando los datos están ordenados y visibles.</p>
+        <div class="srv-tags"><span>Analytics</span><span>KPIs</span><span>Tiempo real</span></div>
+      </div>
+      <div class="srv" data-r>
+        <span class="srv-num">06</span>
+        <svg class="srv-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12h8v16H8zM24 8h8v24h-8z"/><path d="M16 20h8"/></svg>
+        <h3>Migraciones y rescates</h3>
+        <p>¿Tenés un sistema viejo que ya no funciona? Modernizo, migro y documento. También rescato proyectos abandonados y los llevo a producción.</p>
+        <div class="srv-tags"><span>Legacy</span><span>Migración</span><span>Refactor</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTORS
+══════════════════════════════════ -->
+<section class="sectors" id="rubros">
+  <div class="w">
+    <div data-r>
+      <span class="s-label" data-i18n="sec.label">Rubros</span>
+      <h2 class="s-title" data-i18n="sec.title">Trabajo con negocios<br><em>concretos</em>.</h2>
+      <p class="s-lead" data-i18n="sec.lead">No soy un generalista. Entiendo cómo funcionan estos sectores y qué les duele.</p>
+    </div>
+    <div class="sec-grid">
+      <div class="sec" data-r>
+        <span class="sec-icon">🏥</span>
+        <h3>Clínicas y consultorios</h3>
+        <span class="sec-tag">"Tengo pacientes anotados en papel y se me cruzan los turnos."</span>
+        <p>Sistema de turnos online, historial clínico digital, recordatorios automáticos y gestión de profesionales. Todo en un solo lugar, desde el celular.</p>
+        <ul class="sec-feats">
+          <li>Agenda inteligente por profesional</li>
+          <li>Historial de pacientes y evoluciones</li>
+          <li>Recordatorios automáticos por WhatsApp o email</li>
+          <li>Panel de facturación y cobranza</li>
+        </ul>
+      </div>
+      <div class="sec" data-r>
+        <span class="sec-icon">⚖️</span>
+        <h3>Estudios jurídicos</h3>
+        <span class="sec-tag">"Los expedientes están en carpetas y nunca sé en qué estado está cada caso."</span>
+        <p>Gestión de expedientes, seguimiento de plazos y vencimientos, comunicación con clientes y generación de documentos. Todo trazado.</p>
+        <ul class="sec-feats">
+          <li>Base de expedientes y causas</li>
+          <li>Alertas de vencimientos legales</li>
+          <li>Portal de seguimiento para clientes</li>
+          <li>Gestión de honorarios y facturación</li>
+        </ul>
+      </div>
+      <div class="sec" data-r>
+        <span class="sec-icon">🛒</span>
+        <h3>Comercios y mercados</h3>
+        <span class="sec-tag">"El stock lo controlo en Excel y siempre hay diferencias al cierre del día."</span>
+        <p>Sistema de punto de venta, control de stock en tiempo real, catálogo digital, pedidos y reportes. Escalable desde un local hasta una cadena.</p>
+        <ul class="sec-feats">
+          <li>POS y caja diaria</li>
+          <li>Control de inventario y alertas de stock</li>
+          <li>Catálogo y pedidos online</li>
+          <li>Reportes de ventas y rentabilidad</li>
+        </ul>
+      </div>
+      <div class="sec" data-r>
+        <span class="sec-icon">🏆</span>
+        <h3>Instituciones deportivas</h3>
+        <span class="sec-tag">"Las cuotas las cobro por mensaje y no sé quién está al día."</span>
+        <p>Gestión de socios, cobro de cuotas, reserva de instalaciones e inscripciones a actividades. Para clubes que quieren operar como empresas.</p>
+        <ul class="sec-feats">
+          <li>Padrón de socios y estados de cuenta</li>
+          <li>Reservas de canchas y espacios</li>
+          <li>Inscripciones y torneos</li>
+          <li>Comunicaciones y novedades</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PROOF STRIP
+══════════════════════════════════ -->
+<div class="proof">
+  <div class="w">
+    <blockquote class="proof-q">
+      <em>"Digitalizo procesos que hoy te hacen perder tiempo y dinero."</em>
+    </blockquote>
+    <div class="proof-stats">
+      <div><div class="pn">+20</div><div class="pl">Proyectos entregados</div></div>
+      <div><div class="pn">8+</div><div class="pl">Años de experiencia</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PROCESS
+══════════════════════════════════ -->
+<section id="proceso">
+  <div class="w">
+    <div class="proc-inner">
+      <div class="proc-sticky" data-r>
+        <span class="s-label" data-i18n="proc.label">Proceso</span>
+        <h2 class="s-title" data-i18n="proc.title">Simple, directo<br>y <em>sin sorpresas</em>.</h2>
+        <p class="s-lead" style="font-size:15px;margin-top:20px" data-i18n="proc.lead">Sabés qué esperar en cada momento, cuánto cuesta y cuándo termina.</p>
+      </div>
+      <div class="steps">
+        <div class="step on" data-r>
+          <span class="step-n">01</span>
+          <div>
+            <h4>Diagnóstico gratuito</h4>
+            <p>Hablamos 30 minutos. Me contás cómo trabaja hoy tu negocio y qué querés mejorar. Te doy una orientación honesta: si puedo ayudarte, cómo y a qué costo.</p>
+          </div>
+        </div>
+        <div class="step" data-r>
+          <span class="step-n">02</span>
+          <div>
+            <h4>Propuesta concreta</h4>
+            <p>En 48 horas te mando una propuesta escrita: qué voy a construir, cómo va a funcionar, en cuánto tiempo y cuánto cuesta. Sin letra chica.</p>
+          </div>
+        </div>
+        <div class="step" data-r>
+          <span class="step-n">03</span>
+          <div>
+            <h4>Desarrollo iterativo</h4>
+            <p>Trabajo en etapas y te muestro avances. Podés usar partes del sistema antes de que esté 100% terminado. El feedback es bienvenido.</p>
+          </div>
+        </div>
+        <div class="step" data-r>
+          <span class="step-n">04</span>
+          <div>
+            <h4>Entrega y soporte</h4>
+            <p>El sistema queda en tu servidor o en la nube. Te capacito para usarlo y quedo disponible para ajustes y soporte. No desaparezco al cobrar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CONTACT
+══════════════════════════════════ -->
+<section class="contact" id="contacto">
+  <div class="w">
+    <div class="con-inner">
+      <div class="con-info" data-r>
+        <span class="s-label" data-i18n="con.label">Contacto</span>
+        <h2 class="s-title" data-i18n="con.title">Contame<br>tu proyecto.</h2>
+        <p data-i18n="con.p">No hace falta tener todo definido. Con saber qué problema querés resolver y para qué rubro alcanza. Respondó en menos de 24 horas.</p>
+        <div class="con-meta">
+          <a href="mailto:jgosaine@gmail.com">
+            <div class="con-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="13" height="9" rx="1.5"/><path d="M1 4l6.5 4.5L14 4"/></svg>
+            </div>
+            jgosaine@gmail.com
+          </a>
+          <a href="https://linkedin.com/in/javiergosaine" target="_blank" rel="noopener">
+            <div class="con-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="13" height="13" rx="2"/><path d="M5 7v4M5 4.5v.5"/><path d="M8 11V7.5c0-1 .5-1.5 1.5-1.5S11 6.5 11 7.5V11"/></svg>
+            </div>
+            LinkedIn · Javier Gosaine
+          </a>
+          <a href="https://github.com/javiergosaine" target="_blank" rel="noopener">
+            <div class="con-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 1C4 1 1 4 1 7.5c0 2.9 1.9 5.4 4.5 6.3-.1-.6-.1-1.4 0-2l1.7-7.3s-.4-.9-.4-2.2C6.8 0.3 8 1 8 1z"/></svg>
+            </div>
+            GitHub · @javiergosaine
+          </a>
+        </div>
+      </div>
+      <div class="form-box" data-r>
+        <!-- ⚠️  Reemplazá REEMPLAZAR_CON_TU_ID con tu ID de Formspree -->
+        <form id="cF" action="https://formspree.io/f/mdablaeb" method="POST">
+          <div class="f2">
+            <div class="fr"><label>Nombre</label><input type="text" name="nombre" placeholder="Tu nombre" required/></div>
+            <div class="fr"><label>Email</label><input type="email" name="email" placeholder="tu@email.com" required/></div>
+          </div>
+          <div class="fr">
+            <label>Rubro de tu negocio</label>
+            <select name="rubro">
+              <option value="">Seleccioná un rubro</option>
+              <option>Clínica / Consultorio</option>
+              <option>Estudio jurídico</option>
+              <option>Comercio / Mercado</option>
+              <option>Institución deportiva</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="fr"><label>¿Qué problema querés resolver?</label><textarea name="mensaje" placeholder="Describí brevemente el problema actual de tu negocio y qué te gustaría tener..." required></textarea></div>
+          <button type="submit" class="btn-form">Enviar mensaje →</button>
+          <p class="f-note">Te respondo en menos de 24 horas · Sin compromiso</p>
+        </form>
+        <div class="f-ok" id="fOk">
+          <h3>¡Mensaje recibido!</h3>
+          <p>Te respondo en menos de 24 horas con una primera orientación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
 <footer>
-  <p>© 2025 Javier Gosaine · <span data-es="Hecho con" data-en="Made with">Hecho con</span> ❤️</p>
+  <div class="foot">
+    <span class="foot-logo">Javier Gosaine<span>.</span></span>
+    <p>© <span id="yr"></span> · Desarrollo de software para pymes · Argentina</p>
+  </div>
 </footer>
 
-<script src="main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
