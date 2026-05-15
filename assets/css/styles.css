@@ -398,6 +398,33 @@ html.light .proof { background: #18181C; }
 .f-ok p { color: var(--g4); font-size: 15px; }
 
 /* ═══════════════════════════════════════════
+   STYLE FOR DEMO BUTTON IN SERVICES
+═══════════════════════════════════════════ */
+
+.demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 9px 18px;
+  border-radius: var(--r);
+  border: 1.5px solid var(--acc);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--acc);
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+.demo-btn:hover {
+  background: var(--acc);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════ */
 footer { border-top: 1px solid var(--g2); padding: 28px 0; }

@@ -27,6 +27,8 @@ const T = {
     'srv4.h':'Sitios web profesionales','srv4.p':'Tu presencia digital: rápida, clara y orientada a que tus clientes entiendan qué hacés y te contacten. Landing pages y sitios institucionales.',
     'srv5.h':'Dashboards y reportes','srv5.p':'Visualizá ventas, agenda, rendimiento y stock en tiempo real. Tomás mejores decisiones cuando los datos están ordenados y visibles.',
     'srv6.h':'Migraciones y rescates','srv6.p':'¿Tenés un sistema viejo que ya no funciona? Modernizo, migro y documento. También rescato proyectos abandonados y los llevo a producción.',
+    'srv7.h':'Sistemas para instituciones','srv7.p':'Gestión académica, administrativa y financiera para instituciones públicas y privadas. Alumnos, docentes, horarios, asistencia, pagos y reportes en un solo sistema, accesible desde cualquier dispositivo.',
+    'srv7.demo':'Ver demo →',
     'sec.label':'Rubros','sec.title':'Trabajo con negocios<br><em>concretos</em>.','sec.lead':'No soy un generalista. Entiendo cómo funcionan estos sectores y qué les duele.',
     'sec1.h':'Clínicas y consultorios','sec1.tag':'"Tengo pacientes anotados en papel y se me cruzan los turnos."','sec1.p':'Sistema de turnos online, historial clínico digital, recordatorios automáticos y gestión de profesionales. Todo en un solo lugar, desde el celular.','sec1.f1':'Agenda inteligente por profesional','sec1.f2':'Historial de pacientes y evoluciones','sec1.f3':'Recordatorios automáticos por WhatsApp o email','sec1.f4':'Panel de facturación y cobranza',
     'sec2.h':'Estudios jurídicos','sec2.tag':'"Los expedientes están en carpetas y nunca sé en qué estado está cada caso."','sec2.p':'Gestión de expedientes, seguimiento de plazos y vencimientos, comunicación con clientes y generación de documentos. Todo trazado.','sec2.f1':'Base de expedientes y causas','sec2.f2':'Alertas de vencimientos legales','sec2.f3':'Portal de seguimiento para clientes','sec2.f4':'Gestión de honorarios y facturación',
@@ -72,6 +74,8 @@ const T = {
     'srv4.h':'Professional websites','srv4.p':'Your digital presence: fast, clear, and built to make potential clients understand what you do and get in touch. Landing pages and institutional sites.',
     'srv5.h':'Dashboards & reports','srv5.p':'Visualize sales, schedule, performance, and stock in real time. You make better decisions when data is organized and visible.',
     'srv6.h':'Migrations & rescues','srv6.p':"Got an old system that's barely working? I modernize, migrate, and document it. I also rescue abandoned projects and bring them to production.",
+    'srv7.h':'Systems for institutions','srv7.p':'Academic, administrative and financial management for public and private institutions. Students, teachers, schedules, attendance, payments and reports — all in one system, accessible from any device.',
+    'srv7.demo':'View demo →',
     'sec.label':'Industries','sec.title':'I work with<br><em>specific businesses</em>.','sec.lead':"I'm not a generalist. I understand how these sectors operate and what their pain points are.",
     'sec1.h':'Clinics & medical offices','sec1.tag':'"Patients are written in a notebook and appointments keep overlapping."','sec1.p':'Online booking system, digital patient records, automatic reminders, and staff management. All in one place, from your phone.','sec1.f1':'Smart per-practitioner scheduling','sec1.f2':'Patient history and clinical notes','sec1.f3':'Automatic reminders via WhatsApp or email','sec1.f4':'Billing and payment dashboard',
     'sec2.h':'Law firms','sec2.tag':'"Case files are in folders and I never know the status of each case."','sec2.p':'Case file management, deadline tracking, client communication, and document generation. Everything traced and organized.','sec2.f1':'Case and file database','sec2.f2':'Legal deadline alerts','sec2.f3':'Client-facing status portal','sec2.f4':'Fee and billing management',
@@ -149,13 +153,16 @@ function applyLang(l) {
     const k = `prob.li${i+1}`; if(T[l][k]) li.textContent = T[l][k];
   });
 
-  // service cards
-  [1,2,3,4,5,6].forEach(n => {
+  // service cards (1-7)
+  [1,2,3,4,5,6,7].forEach(n => {
     const card = document.querySelector(`.srv:nth-child(${n})`);
     if (!card) return;
-    const h = card.querySelector('h3'), p = card.querySelector('p');
+    const h = card.querySelector('h3');
+    const p = card.querySelector('p');
+    const demo = card.querySelector('.demo-btn');
     if (h && T[l][`srv${n}.h`]) h.textContent = T[l][`srv${n}.h`];
     if (p && T[l][`srv${n}.p`]) p.textContent = T[l][`srv${n}.p`];
+    if (demo && T[l][`srv${n}.demo`]) demo.textContent = T[l][`srv${n}.demo`];
   });
 
   // sector cards

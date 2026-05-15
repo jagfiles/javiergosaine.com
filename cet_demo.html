@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CET Gestión — Demo Interactivo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1e3a8a;--navy2:#2563eb;--navy-dark:#1e2d6b;
+  --gold:#f59e0b;--gold2:#fbbf24;
+  --purple:#7c3aed;--pink:#be185d;--green:#16a34a;
+  --red:#dc2626;--orange:#ea580c;
+  --gray:#6b7280;--light:#f1f5f9;--border:#e2e8f0;
+  --white:#fff;--text:#1e293b;--muted:#64748b;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f172a;color:var(--text);overflow:hidden;height:100vh}
+
+/* INTRO SCREEN */
+#intro{position:fixed;inset:0;background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#0f172a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;transition:opacity .8s}
+#intro.hide{opacity:0;pointer-events:none}
+.intro-logo{width:80px;height:80px;background:var(--gold);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.intro-logo svg{width:44px;height:44px;fill:var(--navy)}
+.intro-title{font-size:36px;font-weight:800;color:#fff;margin-bottom:8px;text-align:center}
+.intro-sub{font-size:16px;color:rgba(255,255,255,.6);margin-bottom:48px;text-align:center}
+.intro-roles{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
+.role-btn{padding:16px 28px;border-radius:14px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;transition:all .2s;text-align:center;min-width:160px}
+.role-btn:hover{border-color:var(--gold);background:rgba(245,158,11,.15);transform:translateY(-2px)}
+.role-btn .role-icon{font-size:28px;margin-bottom:8px}
+.role-btn .role-name{font-size:15px;font-weight:600}
+.role-btn .role-desc{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* APP SHELL */
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:#0f172a}
+
+/* TOP CONTROLS */
+.controls-bar{height:48px;background:#0f172a;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0}
+.controls-left{display:flex;align-items:center;gap:12px}
+.ctrl-label{font-size:12px;color:rgba(255,255,255,.4)}
+.device-toggle{display:flex;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden}
+.device-btn{padding:5px 12px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;border:none;background:none}
+.device-btn.active{background:var(--navy2);color:#fff}
+.role-switcher{display:flex;gap:6px}
+.rs-btn{padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);transition:all .15s}
+.rs-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:600}
+.controls-right{display:flex;align-items:center;gap:10px}
+.back-intro{font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;padding:4px 8px;border-radius:4px}
+.back-intro:hover{color:rgba(255,255,255,.6)}
+
+/* DEVICE FRAME */
+.frame-area{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:12px}
+.device-frame{transition:all .4s cubic-bezier(.4,0,.2,1);overflow:hidden;position:relative}
+.device-frame.desktop{width:100%;max-width:1200px;height:100%;border-radius:12px;box-shadow:0 25px 80px rgba(0,0,0,.6)}
+.device-frame.mobile{width:390px;height:780px;border-radius:44px;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,255,255,.1);overflow:hidden}
+.mobile-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0f172a;border-radius:0 0 20px 20px;z-index:100}
+
+/* THE APP INSIDE FRAME */
+.cet-app{width:100%;height:100%;display:flex;background:#f1f5f9;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:200px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;transition:all .3s}
+.device-frame.mobile .sidebar{display:none}
+.sb-head{padding:16px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-logo{display:flex;align-items:center;gap:9px}
+.sb-icon{width:32px;height:32px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-icon svg{width:18px;height:18px;fill:var(--navy)}
+.sb-name{font-size:13px;font-weight:700;color:#fff}
+.sb-tagline{font-size:10px;color:rgba(255,255,255,.45)}
+.sb-nav{flex:1;padding:8px 0;overflow-y:auto}
+.nav-sec{padding:10px 14px 4px;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;border-left:3px solid transparent;color:rgba(255,255,255,.65);font-size:13px;transition:all .15s}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:rgba(245,158,11,.15);border-left-color:var(--gold);color:#fff}
+.nav-item .ni{font-size:15px;width:16px;text-align:center}
+.sb-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-user{display:flex;align-items:center;gap:8px}
+.sb-av{width:28px;height:28px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy);flex-shrink:0}
+.sb-uname{font-size:12px;color:#fff;font-weight:500}
+.sb-urole{font-size:10px;color:rgba(255,255,255,.4)}
+
+/* MAIN */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:50px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.device-frame.mobile .topbar{height:44px;padding-top:36px;height:80px}
+.tb-menu{display:none;width:28px;height:28px;align-items:center;justify-content:center;cursor:pointer;color:var(--navy);font-size:18px}
+.device-frame.mobile .tb-menu{display:flex}
+.tb-logo-m{display:none;align-items:center;gap:8px}
+.device-frame.mobile .tb-logo-m{display:flex}
+.tb-logo-m .tl-icon{width:28px;height:28px;background:var(--navy);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.tb-logo-m .tl-icon svg{width:15px;height:15px;fill:var(--gold)}
+.tb-logo-m .tl-name{font-size:14px;font-weight:700;color:var(--navy)}
+.tb-title{font-weight:600;font-size:14px;color:var(--navy);flex:1}
+.device-frame.mobile .tb-title{display:none}
+.tb-role-badge{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-admin{background:#dbeafe;color:#1d4ed8}
+.badge-docente{background:#f3e8ff;color:#7c3aed}
+.badge-alumno{background:#dcfce7;color:#166534}
+.tb-lock{width:28px;height:28px;border-radius:7px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:var(--muted)}
+.tb-salir{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--muted);cursor:pointer}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:16px;background:var(--light)}
+.device-frame.mobile .content{padding:12px}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* HERO BANNER */
+.hero-banner{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:12px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.hero-banner::after{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.hero-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.device-frame.mobile .hero-title{font-size:18px}
+.hero-date{font-size:12px;color:rgba(255,255,255,.55)}
+.hero-cet-badge{position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;text-align:center}
+.device-frame.mobile .hero-cet-badge{display:none}
+.hero-cet-badge .hcb-icon{font-size:20px;margin-bottom:4px}
+.hero-cet-badge .hcb-name{font-size:12px;font-weight:700;color:#fff}
+.hero-cet-badge .hcb-sub{font-size:10px;color:rgba(255,255,255,.5)}
+
+/* ALERT STRIP */
+.alert-strip{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s}
+.alert-strip:hover{background:#fde68a}
+.as-badge{background:var(--gold);color:var(--navy);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.as-text{font-size:13px;color:#92400e;font-weight:500}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.device-frame.mobile .stats-row{grid-template-columns:1fr}
+.stat-card{background:var(--white);border-radius:10px;padding:14px 16px;border-left:4px solid}
+.stat-card.blue{border-color:var(--navy2)}
+.stat-card.green{border-color:var(--green)}
+.stat-card.purple{border-color:var(--purple)}
+.sc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.sc-val{font-size:28px;font-weight:800;line-height:1}
+.stat-card.blue .sc-val{color:var(--navy2)}
+.stat-card.green .sc-val{color:var(--green)}
+.stat-card.purple .sc-val{color:var(--purple)}
+
+/* SECTION */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sec-title{font-size:13px;font-weight:700;color:var(--navy)}
+.sec-link{font-size:12px;color:var(--navy2);cursor:pointer}
+.card{background:var(--white);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.card-body{padding:14px}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);background:var(--light);font-weight:600}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:#f8fafc}
+.device-frame.mobile .data-table{font-size:12px}
+.device-frame.mobile .data-table th,.device-frame.mobile .data-table td{padding:7px 8px}
+
+/* BADGES */
+.badge{display:inline-flex;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-yellow{background:#fef3c7;color:#92400e}
+.badge-purple{background:#f3e8ff;color:#7c3aed}
+.badge-pink{background:#fce7f3;color:#9d174d}
+.badge-gray{background:#f1f5f9;color:#475569}
+.badge-orange{background:#fff7ed;color:#c2410c}
+
+/* BUTTON */
+.btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold2)}
+.btn-purple{background:var(--purple);color:#fff}
+.btn-purple:hover{background:#6d28d9}
+.btn-pink{background:var(--pink);color:#fff}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-outline:hover{background:var(--light)}
+.btn-danger{background:#fee2e2;color:var(--red)}
+
+/* HORARIOS PAGE */
+.day-block{margin-bottom:14px}
+.day-header{background:var(--navy);color:#fff;padding:10px 14px;border-radius:10px 10px 0 0;font-size:13px;font-weight:700}
+.day-body{background:var(--white);border-radius:0 0 10px 10px;overflow:hidden}
+.class-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border)}
+.class-row:last-child{border-bottom:none}
+.class-time{font-size:12px;color:var(--muted);width:90px;flex-shrink:0}
+.class-info{flex:1}
+.class-name{font-size:13px;font-weight:600;color:var(--text)}
+.class-career{font-size:11px;color:var(--muted)}
+.class-docente{font-size:12px;color:var(--muted)}
+.class-aula{flex-shrink:0}
+
+/* ASISTENCIA PAGE */
+.asist-header{background:var(--white);border-radius:10px;padding:14px;margin-bottom:12px}
+.asist-class-name{font-size:15px;font-weight:700;color:var(--navy)}
+.asist-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.asist-controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.cancel-warning{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.cw-text{font-size:13px;color:#c2410c;font-weight:500}
+.alumno-row{background:var(--white);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.alumno-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
+.asist-btns{display:flex;gap:6px;flex-wrap:wrap}
+.asist-btn{padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s}
+.asist-btn.pres{border-color:#16a34a;color:#16a34a;background:#f0fdf4}
+.asist-btn.aus{border-color:#dc2626;color:#dc2626;background:#fff}
+.asist-btn.tard{border-color:#d97706;color:#d97706;background:#fff}
+.asist-btn.just{border-color:#2563eb;color:#2563eb;background:#fff}
+.asist-btn.selected-pres{background:#16a34a;color:#fff;border-color:#16a34a}
+.asist-btn.selected-aus{background:#dc2626;color:#fff;border-color:#dc2626}
+.asist-btn.selected-tard{background:#d97706;color:#fff;border-color:#d97706}
+
+/* HISTORIAL TABLE */
+.hist-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.hl-dot{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+.hl-p{background:#16a34a}
+.hl-a{background:#dc2626}
+.hl-t{background:#d97706}
+.hl-x{background:#6b7280}
+
+/* NOTAS PAGE */
+.notas-filter{background:var(--white);border-radius:10px;padding:14px;margin-bottom:12px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:100px}
+.filter-label{font-size:11px;color:var(--muted);font-weight:500}
+.filter-input{padding:7px 10px;border-radius:7px;border:1px solid var(--border);font-size:13px;background:var(--white)}
+.materia-table-wrap{background:var(--white);border-radius:10px;overflow:hidden}
+.mt-header{background:var(--pink);padding:10px 14px;display:grid;grid-template-columns:1fr 80px 80px 80px 80px 80px 100px;gap:8px;font-size:11px;font-weight:600;color:#fff}
+.device-frame.mobile .mt-header{grid-template-columns:1fr 60px 60px 60px}
+.mt-row{padding:10px 14px;display:grid;grid-template-columns:1fr 80px 80px 80px 80px 80px 100px;gap:8px;border-bottom:1px solid var(--border);font-size:13px;align-items:center}
+.device-frame.mobile .mt-row{grid-template-columns:1fr 60px 60px 60px}
+.mt-row:last-child{border-bottom:none}
+.nota-cell{text-align:center;font-weight:600}
+.nota-green{color:#16a34a}
+.nota-red{color:#dc2626}
+.nota-orange{color:#d97706}
+.cargar-btn{background:var(--pink);color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;white-space:nowrap}
+
+/* ALUMNO NOTAS */
+.carrera-header{background:var(--pink);border-radius:10px 10px 0 0;padding:12px 14px}
+.ch-name{font-size:14px;font-weight:700;color:#fff}
+.ch-sub{font-size:11px;color:rgba(255,255,255,.7)}
+.year-sec{background:var(--white);border-bottom:1px solid var(--border)}
+.year-label{padding:8px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;background:var(--light)}
+.alumno-nota-row{padding:9px 14px;display:flex;align-items:center;border-bottom:1px solid var(--border)}
+.alumno-nota-row:last-child{border-bottom:none}
+.an-info{flex:1}
+.an-name{font-size:13px;font-weight:600;color:var(--text)}
+.an-code{font-size:11px;color:var(--muted)}
+.an-notas{display:flex;gap:6px;flex-wrap:wrap}
+.nota-badge{padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700}
+.nb-4{background:#fee2e2;color:#991b1b}
+.nb-6{background:#fff7ed;color:#c2410c}
+.nb-7{background:#fef3c7;color:#92400e}
+.nb-8{background:#dcfce7;color:#166534}
+.nb-blank{background:#f1f5f9;color:#94a3b8}
+
+/* ALUMNO ASISTENCIA */
+.asist-bar-wrap{background:var(--white);border-radius:10px;padding:14px;margin-bottom:12px}
+.ab-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.ab-pct{font-size:22px;font-weight:800;color:#dc2626}
+.ab-pct.ok{color:#16a34a}
+.ab-bar{height:10px;background:#fee2e2;border-radius:99px;overflow:hidden;margin-top:4px}
+.ab-fill{height:100%;border-radius:99px;background:#dc2626;transition:width .5s}
+.ab-fill.ok{background:#16a34a}
+.ab-min{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* INSCRIPCIONES */
+.insc-pending{border-radius:10px;overflow:hidden;margin-bottom:14px}
+.ip-header{background:var(--gold);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.ip-title{font-size:13px;font-weight:700;color:var(--navy)}
+.ip-count{background:var(--navy);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.insc-approved{border-radius:10px;overflow:hidden}
+.ia-header{background:#374151;padding:10px 14px}
+.ia-title{font-size:13px;font-weight:700;color:#fff}
+.doc-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);gap:10px}
+.doc-row:last-child{border-bottom:none}
+.doc-icon{font-size:16px;color:var(--muted);width:20px}
+.doc-name{flex:1;font-size:13px;color:var(--text)}
+.doc-status{flex-shrink:0}
+.doc-link{font-size:12px;color:var(--navy2);cursor:pointer;flex-shrink:0}
+
+/* MOBILE BOTTOM NAV */
+.bottom-nav{display:none;height:56px;background:var(--white);border-top:1px solid var(--border);flex-shrink:0}
+.device-frame.mobile .bottom-nav{display:flex}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px;color:var(--muted);transition:color .15s}
+.bn-item.active{color:var(--navy2)}
+.bn-icon{font-size:20px}
+.bn-label{font-size:10px;font-weight:500}
+
+/* MOBILE SIDEBAR OVERLAY */
+.mobile-overlay{display:none;position:absolute;inset:0;z-index:50}
+.device-frame.mobile .mobile-overlay.show{display:flex}
+.mo-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.mo-drawer{position:absolute;left:0;top:0;bottom:0;width:220px;background:var(--navy);display:flex;flex-direction:column;padding-top:50px}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* MODAL */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--white);border-radius:14px;padding:20px;width:calc(100% - 40px);max-width:400px;max-height:80vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.modal-close{float:right;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
+.form-group{margin-bottom:12px}
+.form-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px;display:block}
+.form-input{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--border);font-size:13px}
+.form-select{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--border);font-size:13px;background:var(--white)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
+/* QUICK ACTIONS - DOCENTE */
+.qa-list{display:flex;flex-direction:column;gap:0}
+.qa-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.qa-item:hover{background:var(--light)}
+.qa-item:last-child{border-bottom:none}
+.qa-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.qa-blue{background:#dbeafe}
+.qa-pink{background:#fce7f3}
+.qa-green{background:#dcfce7}
+.qa-text{flex:1;font-size:13px;font-weight:500;color:var(--text)}
+.qa-arrow{color:var(--muted);font-size:14px}
+
+/* MATERIAS LIST */
+.mat-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.mat-item:last-child{border-bottom:none}
+.mat-dot{width:8px;height:8px;border-radius:50%;background:var(--navy2);flex-shrink:0}
+.mat-info{flex:1}
+.mat-name{font-size:13px;font-weight:600;color:var(--text)}
+.mat-career{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="intro">
+  <div class="intro-logo">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+  </div>
+  <div class="intro-title">CET Gestión</div>
+  <div class="intro-sub">Sistema de Gestión Institucional · Trelew, Chubut<br>Demo Interactivo — Seleccioná un rol para comenzar</div>
+  <div class="intro-roles">
+    <div class="role-btn" onclick="startDemo('admin')">
+      <div class="role-icon">🏛️</div>
+      <div class="role-name">Administrador</div>
+      <div class="role-desc">Gestión completa del instituto</div>
+    </div>
+    <div class="role-btn" onclick="startDemo('docente')">
+      <div class="role-icon">👩‍🏫</div>
+      <div class="role-name">Docente</div>
+      <div class="role-desc">Asistencia y calificaciones</div>
+    </div>
+    <div class="role-btn" onclick="startDemo('alumno')">
+      <div class="role-icon">🎓</div>
+      <div class="role-name">Alumno</div>
+      <div class="role-desc">Mis notas y asistencia</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <div class="controls-bar">
+    <div class="controls-left">
+      <span class="ctrl-label">Vista:</span>
+      <div class="device-toggle">
+        <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')">🖥 Desktop</button>
+        <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')">📱 Mobile</button>
+      </div>
+      <span class="ctrl-label" style="margin-left:8px">Rol:</span>
+      <div class="role-switcher">
+        <button class="rs-btn" id="rs-admin" onclick="setRole('admin')">Admin</button>
+        <button class="rs-btn" id="rs-docente" onclick="setRole('docente')">Docente</button>
+        <button class="rs-btn" id="rs-alumno" onclick="setRole('alumno')">Alumno</button>
+      </div>
+    </div>
+    <div class="controls-right">
+      <span class="back-intro" onclick="goIntro()">← Inicio</span>
+    </div>
+  </div>
+
+  <div class="frame-area">
+    <div class="device-frame desktop" id="device-frame">
+      <div class="mobile-notch" style="display:none" id="notch"></div>
+
+      <!-- THE APP -->
+      <div class="cet-app">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+          <div class="sb-head">
+            <div class="sb-logo">
+              <div class="sb-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+              </div>
+              <div>
+                <div class="sb-name">CET Gestión</div>
+                <div class="sb-tagline">Sistema institucional</div>
+              </div>
+            </div>
+          </div>
+          <div class="sb-nav" id="sb-nav"><!-- dynamic --></div>
+          <div class="sb-foot">
+            <div class="sb-user">
+              <div class="sb-av" id="sb-av">AC</div>
+              <div>
+                <div class="sb-uname" id="sb-uname">Admin CET</div>
+                <div class="sb-urole" id="sb-urole">Administrador</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN -->
+        <div class="main-area">
+          <div class="topbar">
+            <div class="tb-menu" onclick="toggleMobileMenu()">☰</div>
+            <div class="tb-logo-m">
+              <div class="tl-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+              </div>
+              <span class="tl-name">CET Gestión</span>
+            </div>
+            <div class="tb-title" id="tb-title">Inicio</div>
+            <span class="tb-role-badge" id="tb-badge">Administrador</span>
+            <div class="tb-lock">🔒</div>
+            <button class="tb-salir">Salir</button>
+          </div>
+
+          <div class="content" id="content"><!-- dynamic --></div>
+
+          <!-- MOBILE BOTTOM NAV -->
+          <div class="bottom-nav" id="bottom-nav"><!-- dynamic --></div>
+        </div>
+
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay" id="mobile-overlay">
+          <div class="mo-backdrop" onclick="toggleMobileMenu()"></div>
+          <div class="mo-drawer" id="mo-drawer"><!-- dynamic --></div>
+        </div>
+
+        <!-- MODAL -->
+        <div class="modal-overlay" id="modal-overlay">
+          <div class="modal-box" id="modal-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentRole = 'admin';
+let currentDevice = 'desktop';
+let currentPage = 'inicio';
+let asistState = {};
+
+
+// ─── NAVIGATION CONFIG ────────────────────────────────────────────────────────
+const navConfig = {
+  admin: {
+    label:'Admin CET', initials:'AC', role:'Administrador', badge:'badge-admin',
+    sections:[
+      { items:[
+        {id:'inicio', icon:'🏠', label:'Inicio'},
+        {id:'usuarios', icon:'👥', label:'Usuarios'},
+        {id:'inscripciones', icon:'📋', label:'Inscripciones'},
+        {id:'auditoria', icon:'🔍', label:'Auditoría'},
+      ]},
+      { title:'ACADÉMICO', items:[
+        {id:'alumnos', icon:'🎓', label:'Alumnos'},
+        {id:'docentes', icon:'👩‍🏫', label:'Docentes'},
+        {id:'carreras', icon:'📚', label:'Carreras'},
+      ]},
+      { title:'GESTIÓN', items:[
+        {id:'horarios', icon:'🗓️', label:'Horarios'},
+        {id:'asistencias', icon:'✅', label:'Asistencias'},
+        {id:'notas', icon:'📝', label:'Notas'},
+      ]},
+    ],
+    bottomNav:[
+      {id:'inicio',icon:'🏠',label:'Inicio'},
+      {id:'asistencias',icon:'✅',label:'Asistencias'},
+      {id:'notas',icon:'📝',label:'Notas'},
+      {id:'menu',icon:'☰',label:'Menú'},
+    ]
+  },
+  docente: {
+    label:'María García', initials:'MG', role:'Docente', badge:'badge-docente',
+    sections:[
+      { items:[
+        {id:'inicio', icon:'🏠', label:'Inicio'},
+      ]},
+      { title:'GESTIÓN', items:[
+        {id:'asistencias', icon:'✅', label:'Asistencias'},
+        {id:'notas', icon:'📝', label:'Notas'},
+        {id:'mis-alumnos', icon:'🎓', label:'Mis alumnos'},
+      ]},
+    ],
+    bottomNav:[
+      {id:'inicio',icon:'🏠',label:'Inicio'},
+      {id:'asistencias',icon:'✅',label:'Asistencias'},
+      {id:'notas',icon:'📝',label:'Notas'},
+      {id:'menu',icon:'☰',label:'Menú'},
+    ]
+  },
+  alumno: {
+    label:'alumno primero', initials:'AP', role:'Alumno', badge:'badge-alumno',
+    sections:[
+      { items:[
+        {id:'inicio', icon:'🏠', label:'Inicio'},
+        {id:'mis-notas', icon:'📝', label:'Mis notas'},
+        {id:'mi-asistencia', icon:'📊', label:'Mi asistencia'},
+      ]},
+    ],
+    bottomNav:[
+      {id:'inicio',icon:'🏠',label:'Inicio'},
+      {id:'mis-notas',icon:'📝',label:'Mis notas'},
+      {id:'menu',icon:'☰',label:'Menú'},
+    ]
+  }
+};
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+function startDemo(role){
+  document.getElementById('intro').classList.add('hide');
+  setTimeout(()=>{ document.getElementById('intro').style.display='none'; },800);
+  document.getElementById('app').style.display='flex';
+  setRole(role);
+  setDevice('desktop');
+}
+
+function goIntro(){
+  document.getElementById('app').style.display='none';
+  const intro = document.getElementById('intro');
+  intro.style.display='flex';
+  intro.classList.remove('hide');
+}
+
+function setDevice(d){
+  currentDevice = d;
+  const frame = document.getElementById('device-frame');
+  const notch = document.getElementById('notch');
+  frame.className = 'device-frame ' + d;
+  notch.style.display = d==='mobile' ? 'block' : 'none';
+  document.getElementById('btn-desktop').classList.toggle('active', d==='desktop');
+  document.getElementById('btn-mobile').classList.toggle('active', d==='mobile');
+}
+
+function setRole(role){
+  currentRole = role;
+  const cfg = navConfig[role];
+  document.getElementById('rs-admin').classList.toggle('active', role==='admin');
+  document.getElementById('rs-docente').classList.toggle('active', role==='docente');
+  document.getElementById('rs-alumno').classList.toggle('active', role==='alumno');
+  document.getElementById('sb-av').textContent = cfg.initials;
+  document.getElementById('sb-uname').textContent = cfg.label;
+  document.getElementById('sb-urole').textContent = cfg.role;
+  const badge = document.getElementById('tb-badge');
+  badge.textContent = cfg.role;
+  badge.className = 'tb-role-badge ' + cfg.badge;
+  buildSidebar();
+  buildBottomNav();
+  navigateTo('inicio');
+}
+
+function buildSidebar(){
+  const cfg = navConfig[currentRole];
+  let html = '';
+  cfg.sections.forEach(sec=>{
+    if(sec.title) html += `<div class="nav-sec">${sec.title}</div>`;
+    sec.items.forEach(item=>{
+      html += `<div class="nav-item" id="nav-${item.id}" onclick="navigateTo('${item.id}')">
+        <span class="ni">${item.icon}</span>${item.label}
+      </div>`;
+    });
+  });
+  document.getElementById('sb-nav').innerHTML = html;
+  // drawer copy
+  document.getElementById('mo-drawer').innerHTML = html;
+}
+
+function buildBottomNav(){
+  const cfg = navConfig[currentRole];
+  let html = '';
+  cfg.bottomNav.forEach(item=>{
+    html += `<div class="bn-item" id="bn-${item.id}" onclick="${item.id==='menu'?'toggleMobileMenu()':'navigateTo(\''+item.id+'\')'  }">
+      <span class="bn-icon">${item.icon}</span>
+      <span class="bn-label">${item.label}</span>
+    </div>`;
+  });
+  document.getElementById('bottom-nav').innerHTML = html;
+}
+
+function navigateTo(page){
+  if(page==='menu') return;
+  currentPage = page;
+  // update active nav
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const navEl = document.getElementById('nav-'+page);
+  if(navEl) navEl.classList.add('active');
+  document.querySelectorAll('.bn-item').forEach(el=>el.classList.remove('active'));
+  const bnEl = document.getElementById('bn-'+page);
+  if(bnEl) bnEl.classList.add('active');
+  // title
+  const titles = {
+    inicio:'Inicio', usuarios:'Usuarios', inscripciones:'Inscripciones',
+    auditoria:'Auditoría', alumnos:'Alumnos', docentes:'Docentes',
+    carreras:'Carreras', horarios:'Horarios', asistencias:'Asistencias',
+    notas:'Notas','mis-notas':'Mis notas','mi-asistencia':'Mi asistencia',
+    'mis-alumnos':'Mis alumnos'
+  };
+  document.getElementById('tb-title').textContent = titles[page]||page;
+  renderPage(page);
+  closeMobileMenu();
+}
+
+// ─── PAGES ──────────────────────────────────────────────────────────────────
+function renderPage(page){
+  const r = currentRole;
+  if(r==='admin'){
+    if(page==='inicio') renderAdminInicio();
+    else if(page==='inscripciones') renderInscripciones();
+    else if(page==='alumnos') renderAlumnos();
+    else if(page==='docentes') renderDocentes();
+    else if(page==='carreras') renderCarreras();
+    else if(page==='horarios') renderHorarios();
+    else if(page==='asistencias') renderAsistencias();
+    else if(page==='notas') renderNotasAdmin();
+    else renderGeneric(page);
+  } else if(r==='docente'){
+    if(page==='inicio') renderDocenteInicio();
+    else if(page==='asistencias') renderDocenteAsistencias();
+    else if(page==='notas') renderDocenteNotas();
+    else if(page==='mis-alumnos') renderMisAlumnos();
+    else renderGeneric(page);
+  } else if(r==='alumno'){
+    if(page==='inicio') renderAlumnoInicio();
+    else if(page==='mis-notas') renderMisNotas();
+    else if(page==='mi-asistencia') renderMiAsistencia();
+    else renderGeneric(page);
+  }
+}
+
+// ── ADMIN INICIO ─────────────────────────────────────────────────────────────
+function renderAdminInicio(){
+  document.getElementById('content').innerHTML = `
+  <div class="hero-banner">
+    <div class="hero-sub">Centro de Educación Técnica</div>
+    <div class="hero-title">Bienvenido, Admin CET</div>
+    <div class="hero-date">Martes 12 de mayo de 2026</div>
+    <div class="hero-cet-badge">
+      <div class="hcb-icon">🎓</div>
+      <div class="hcb-name">CET</div>
+      <div class="hcb-sub">Sistema de gestión</div>
+    </div>
+  </div>
+  <div class="alert-strip" onclick="navigateTo('inscripciones')">
+    <div class="as-badge">1</div>
+    <div class="as-text">inscripción para revisar</div>
+    <span style="margin-left:auto;color:#92400e;font-size:13px">Ver →</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card blue">
+      <div class="sc-label">Alumnos activos</div>
+      <div class="sc-val">23</div>
+    </div>
+    <div class="stat-card green">
+      <div class="sc-label">Docentes</div>
+      <div class="sc-val">17</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="sc-label">Carreras activas</div>
+      <div class="sc-val">28</div>
+    </div>
+  </div>`;
+}
+
+// ── INSCRIPCIONES ──────────────────────────────────────────────────────────
+function renderInscripciones(){
+  document.getElementById('content').innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div>
+      <div style="font-size:18px;font-weight:800;color:var(--navy)">Inscripciones</div>
+      <div style="font-size:12px;color:var(--muted)">Revisá y aprobá las solicitudes de inscripción</div>
+    </div>
+  </div>
+  <div class="insc-pending card">
+    <div class="ip-header">
+      <span class="ip-title">Pendientes de revisión</span>
+      <span class="ip-count">1</span>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Alumno</th><th>Carrera solicitada</th><th>Estado</th><th>Fecha solicitud</th><th>Acciones</th>
+      </tr></thead>
+      <tbody><tr>
+        <td><div style="font-weight:600">soy un alumno</div><div style="font-size:11px;color:var(--muted)">alumnonuevo@gmail.com</div></td>
+        <td>Tecnicatura Superior en Radiología R.M.P. Nº 866/24 M.E.</td>
+        <td><span class="badge badge-gray">Preinscripto</span></td>
+        <td style="font-size:12px">12/05/2026 18:41</td>
+        <td><button class="btn btn-primary btn-sm" onclick="showDocModal()">Ver documentos</button></td>
+      </tr></tbody>
+    </table>
+  </div>
+  <div class="insc-approved card">
+    <div class="ia-header"><span class="ia-title">Aprobadas últimos 30 días</span></div>
+    <table class="data-table">
+      <thead><tr><th>Alumno</th><th>Carrera</th><th>Fecha ingreso</th></tr></thead>
+      <tbody>
+        <tr><td>Sofía Beltrán</td><td>Tecnicatura Superior en Enfermería</td><td>09/05/2026</td></tr>
+        <tr><td>Bruno Lacroix</td><td>Tecnicatura Superior en Radiología</td><td>04/05/2026</td></tr>
+        <tr><td>Melina Sosa</td><td>Tecnicatura Superior en Turismo</td><td>01/03/2026</td></tr>
+        <tr><td>Julián Castro</td><td>Tecnicatura Superior en Turismo</td><td>01/03/2026</td></tr>
+        <tr><td>Franco Morales</td><td>Tecnicatura Superior en Radiología</td><td>15/02/2026</td></tr>
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function showDocModal(){
+  const docs = [
+    {name:'Certificado de estudios', status:'aprobado'},
+    {name:'Certificado médico', status:'aprobado'},
+    {name:'DNI (frente y dorso)', status:'pendiente'},
+    {name:'Formulario del CET', status:'pendiente'},
+    {name:'Foto carnet', status:'pendiente'},
+  ];
+  let docsHtml = docs.map(d=>`
+    <div class="doc-row">
+      <span class="doc-icon">📄</span>
+      <span class="doc-name">${d.name}</span>
+      <span class="badge ${d.status==='aprobado'?'badge-green':'badge-yellow'}" style="margin-right:8px">${d.status==='aprobado'?'Aprobado':'Pendiente'}</span>
+      ${d.status==='aprobado'?'<span class="doc-link">Ver archivo</span>':'<span style="font-size:12px;color:var(--muted)">Sin archivo</span>'}
+    </div>`).join('');
+  showModal(`
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">soy un alumno · Preinscripto</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:4px">alumnonuevo@gmail.com</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Tecnicatura Superior en Radiología · 12/05/2026 18:41</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Documentación requerida · 2 de 5 aprobados</div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden">${docsHtml}</div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" onclick="closeModal();toast('Solicitud rechazada')">Rechazar solicitud</button>
+      <button class="btn btn-primary" onclick="closeModal();toast('✅ Solicitud aprobada — Alumno activado')">Aprobar inscripción</button>
+    </div>`);
+}
+
+// ── ALUMNOS ────────────────────────────────────────────────────────────────
+function renderAlumnos(){
+  const alumnos = [
+    {name:'Agustina Díaz', carrera:'T.S. Enfermería', estado:'Activo', asist:'92%'},
+    {name:'Camila Ruiz', carrera:'T.S. Enfermería', estado:'Activo', asist:'88%'},
+    {name:'Diego Albornoz', carrera:'T.S. Radiología', estado:'Activo', asist:'95%'},
+    {name:'Franco Morales', carrera:'T.S. Radiología', estado:'Activo', asist:'76%'},
+    {name:'Laura Sánchez', carrera:'T.S. Enfermería', estado:'Activo', asist:'89%'},
+    {name:'Matías Torres', carrera:'T.S. Turismo', estado:'Activo', asist:'61%'},
+    {name:'Nicolás Herrera', carrera:'T.S. Radiología', estado:'Activo', asist:'94%'},
+    {name:'Pedro Giménez', carrera:'T.S. Radiología', estado:'Activo', asist:'82%'},
+    {name:'Renata Villalba', carrera:'T.S. Turismo', estado:'Activo', asist:'91%'},
+    {name:'Sofía Beltrán', carrera:'T.S. Enfermería', estado:'Activo', asist:'78%'},
+  ];
+  const rows = alumnos.map(a=>`<tr>
+    <td><div style="font-weight:600">${a.name}</div></td>
+    <td>${a.carrera}</td>
+    <td><span class="badge badge-green">${a.estado}</span></td>
+    <td><span style="font-weight:600;color:${parseInt(a.asist)<75?'var(--red)':'var(--green)'}">${a.asist}</span></td>
+    <td><button class="btn btn-outline btn-sm">Ver legajo</button></td>
+  </tr>`).join('');
+  document.getElementById('content').innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div><div style="font-size:18px;font-weight:800;color:var(--navy)">Alumnos</div>
+    <div style="font-size:12px;color:var(--muted)">23 alumnos activos</div></div>
+    <button class="btn btn-primary" onclick="toast('Función disponible en versión completa')">+ Nuevo alumno</button>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead><tr><th>Alumno</th><th>Carrera</th><th>Estado</th><th>Asistencia</th><th>Acciones</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ── DOCENTES ───────────────────────────────────────────────────────────────
+function renderDocentes(){
+  const docs = [
+    {name:'María García', materias:3, carrera:'Enfermería'},
+    {name:'Carlos López', materias:2, carrera:'Radiología'},
+    {name:'Luis Rodríguez', materias:4, carrera:'Radiología'},
+    {name:'Sofía Fernández', materias:2, carrera:'Turismo'},
+    {name:'javier alejandro gosaine', materias:1, carrera:'Radiología'},
+  ];
+  const rows = docs.map(d=>`<tr>
+    <td><div style="font-weight:600">${d.name}</div></td>
+    <td>${d.carrera}</td>
+    <td>${d.materias} materias</td>
+    <td><span class="badge badge-green">Activo</span></td>
+    <td><button class="btn btn-outline btn-sm">Ver perfil</button></td>
+  </tr>`).join('');
+  document.getElementById('content').innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div><div style="font-size:18px;font-weight:800;color:var(--navy)">Docentes</div>
+    <div style="font-size:12px;color:var(--muted)">17 docentes registrados</div></div>
+    <button class="btn btn-primary" onclick="toast('Función disponible en versión completa')">+ Nuevo docente</button>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead><tr><th>Nombre</th><th>Carrera principal</th><th>Carga</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ── CARRERAS ───────────────────────────────────────────────────────────────
+function renderCarreras(){
+  document.getElementById('content').innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div><div style="font-size:18px;font-weight:800;color:var(--navy)">Carreras</div>
+    <div style="font-size:12px;color:var(--muted)">28 carreras activas</div></div>
+  </div>
+  <div class="card">
+    <div style="background:var(--green);padding:10px 14px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:space-between">
+      <span style="color:#fff;font-weight:700;font-size:13px">1er año</span>
+      <span style="color:rgba(255,255,255,.7);font-size:12px">10 materias</span>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead><tr><th>Cód.</th><th>Materia</th><th>Año</th><th>Hs/sem</th><th>Cuatrim.</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Introducción a la Radiología</td><td>1</td><td>4</td><td><span class="badge badge-blue">1er cuatrimestre</span></td><td><span style="color:var(--gold);cursor:pointer;font-size:12px">Editar</span> <span style="color:var(--red);cursor:pointer;font-size:12px">Eliminar</span></td></tr>
+          <tr><td>2</td><td>Física I</td><td>1</td><td>2</td><td><span class="badge badge-blue">1er cuatrimestre</span></td><td><span style="color:var(--gold);cursor:pointer;font-size:12px">Editar</span></td></tr>
+          <tr><td>3</td><td>Equipos Convencionales y Digitales I</td><td>1</td><td>4</td><td><span class="badge badge-blue">1er cuatrimestre</span></td><td><span style="color:var(--gold);cursor:pointer;font-size:12px">Editar</span></td></tr>
+          <tr><td>4</td><td>Anatomofisiología</td><td>1</td><td>4</td><td><span class="badge badge-blue">1er cuatrimestre</span></td><td><span style="color:var(--gold);cursor:pointer;font-size:12px">Editar</span></td></tr>
+          <tr><td>5</td><td>Prácticas Profesionalizantes I</td><td>1</td><td>5</td><td><span class="badge badge-purple">2do cuatrimestre</span></td><td><span style="color:var(--gold);cursor:pointer;font-size:12px">Editar</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ── HORARIOS ───────────────────────────────────────────────────────────────
+function renderHorarios(){
+  const dias = {
+    Lunes:[
+      {h:'08:00—10:00', m:'Anatomía y Fisiología', c:'T.S. Enfermería 1er año', d:'María García', a:'Aula 1'},
+      {h:'10:00—12:00', m:'Enfermería Médico-Quirúrgica', c:'T.S. Enfermería 2do año', d:'María García', a:'Aula 1'},
+      {h:'14:00—16:00', m:'Introducción a la Radiología', c:'T.S. Radiología 1er año', d:'Carlos López', a:'Aula 2'},
+      {h:'16:00—18:00', m:'Física II', c:'T.S. Radiología 2do año', d:'Luis Rodríguez', a:'Aula 3'},
+      {h:'17:00—19:00', m:'Informática II', c:'T.S. Radiología 2do año', d:'javier alejandro gosaine', a:'Sala Cómputo'},
+      {h:'18:00—20:00', m:'Introducción al Turismo', c:'T.S. Turismo 1er año', d:'Sofía Fernández', a:'Aula 4'},
+    ],
+    Martes:[
+      {h:'08:00—10:00', m:'Biología Celular', c:'T.S. Enfermería 1er año', d:'Luis Rodríguez', a:'Aula 2'},
+      {h:'10:00—12:00', m:'Farmacología', c:'T.S. Enfermería 2do año', d:'María García', a:'Aula 1'},
+      {h:'14:00—16:00', m:'Física I', c:'T.S. Radiología 1er año', d:'Carlos López', a:'Aula 3'},
+      {h:'16:00—18:00', m:'Técnica Radiológica I', c:'T.S. Radiología 1er año', d:'Carlos López', a:'Lab Radio'},
+      {h:'18:00—20:00', m:'Geografía Turística Argentina', c:'T.S. Turismo 1er año', d:'Sofía Fernández', a:'Aula 4'},
+    ]
+  };
+  let html = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div><div style="font-size:18px;font-weight:800;color:var(--navy)">Horarios</div>
+    <div style="font-size:12px;color:var(--muted)">21 clases programadas</div></div>
+    <button class="btn btn-primary" onclick="toast('Nueva clase agregada ✅')">+ Nueva clase</button>
+  </div>`;
+  for(const [dia, clases] of Object.entries(dias)){
+    const rows = clases.map(c=>`<div class="class-row">
+      <span class="class-time">${c.h}</span>
+      <div class="class-info">
+        <div class="class-name">${c.m}</div>
+        <div class="class-career">${c.c}</div>
+        <div class="class-docente">${c.d}</div>
+      </div>
+      <span class="badge badge-orange class-aula">${c.a}</span>
+      <span style="font-size:12px;color:var(--gold);cursor:pointer;margin-left:8px">Editar</span>
+    </div>`).join('');
+    html += `<div class="day-block"><div class="day-header">${dia}</div><div class="day-body">${rows}</div></div>`;
+  }
+  document.getElementById('content').innerHTML = html;
+}
+
+// ── ASISTENCIAS ADMIN ────────────────────────────────────────────────────
+function renderAsistencias(){
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:18px;font-weight:800;color:var(--navy)">Asistencias</div>
+    <div style="font-size:12px;color:var(--muted)">Martes 12/05/2026 · 12/05/2026</div>
+  </div>
+  <div class="day-block">
+    <div class="day-header" style="background:var(--purple)">Martes · 12/05/2026</div>
+    <div class="day-body">
+      ${[
+        {m:'Biología Celular',h:'08:00—10:00',c:'T.S. Enfermería',taken:true},
+        {m:'Farmacología',h:'10:00—12:00',c:'T.S. Enfermería',taken:false},
+        {m:'Física I',h:'14:00—16:00',c:'T.S. Radiología',taken:true},
+        {m:'Técnica Radiológica I',h:'16:00—18:00',c:'T.S. Radiología',taken:false},
+        {m:'Geografía Turística Argentina',h:'18:00—20:00',c:'T.S. Turismo',taken:false},
+      ].map(c=>`<div class="class-row">
+        <span class="class-time">${c.h}</span>
+        <div class="class-info">
+          <div class="class-name">${c.m}</div>
+          <div class="class-career">${c.c}</div>
+        </div>
+        ${c.taken
+          ? '<span class="badge badge-green">Tomada</span>'
+          : '<button class="btn btn-purple btn-sm" onclick="navigateTo(\'asistencias-tomar\');toast(\'Abriendo lista de asistencia...\')">Tomar asistencia</button>'
+        }
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── NOTAS ADMIN ─────────────────────────────────────────────────────────
+function renderNotasAdmin(){
+  const materias = [
+    {carrera:'T.S. Enfermería', anio:'1er año', mat:'Anatomía y Fisiología', cod:'ENF101', periodo:'Anual'},
+    {carrera:'T.S. Enfermería', anio:'1er año', mat:'Introducción a la Enfermería', cod:'ENF103', periodo:'Anual'},
+    {carrera:'T.S. Enfermería', anio:'2do año', mat:'Enfermería Médico-Quirúrgica', cod:'ENF201', periodo:'Anual'},
+    {carrera:'T.S. Radiología', anio:'1er año', mat:'Introducción a la Radiología', cod:'RAD101', periodo:'Anual'},
+    {carrera:'T.S. Radiología', anio:'1er año', mat:'Física I', cod:'RAD102', periodo:'Anual'},
+  ];
+  const rows = materias.map(m=>`<tr>
+    <td style="font-size:12px">${m.carrera}</td>
+    <td style="font-size:12px">${m.anio}</td>
+    <td style="font-weight:600">${m.mat}</td>
+    <td><span class="badge badge-blue">${m.cod}</span></td>
+    <td><span class="badge badge-gray">${m.periodo}</span></td>
+    <td><button class="btn btn-pink btn-sm" onclick="toast('Abriendo carga de notas: ${m.mat}')">Cargar notas</button></td>
+  </tr>`).join('');
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:18px;font-weight:800;color:var(--navy)">Notas</div>
+    <div style="font-size:12px;color:var(--muted)">Seleccioná una materia para cargar calificaciones</div>
+  </div>
+  <div class="notas-filter">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label class="filter-label">Buscar materia</label>
+        <input class="filter-input" placeholder="Nombre de la materia..." oninput="toast('Filtrando...')">
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">Carrera</label>
+        <select class="filter-input"><option>Todas las carreras</option><option>T.S. Enfermería</option><option>T.S. Radiología</option><option>T.S. Turismo</option></select>
+      </div>
+      <div class="filter-group" style="max-width:100px">
+        <label class="filter-label">Año</label>
+        <select class="filter-input"><option>Todos</option><option>1er año</option><option>2do año</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="toast('Filtros aplicados')">Filtrar</button>
+    </div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="mt-header">
+      <span>Carrera</span><span>Año</span><span>Materia</span><span>Código</span><span>Período</span><span></span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Carrera</th><th>Año</th><th>Materia</th><th>Código</th><th>Período</th><th>Acción</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+// ── DOCENTE INICIO ────────────────────────────────────────────────────────
+function renderDocenteInicio(){
+  document.getElementById('content').innerHTML = `
+  <div class="hero-banner">
+    <div class="hero-sub">Centro de Educación Técnica</div>
+    <div class="hero-title">Bienvenida, María García</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.65);margin-top:4px;font-style:italic">"La educación es el arma más poderosa para cambiar el mundo."</div>
+    <div class="hero-cet-badge">
+      <div class="hcb-icon">👩‍🏫</div>
+      <div class="hcb-name">CET</div>
+      <div class="hcb-sub">Docente</div>
+    </div>
+  </div>
+  <div class="sec-head"><span class="sec-title">Accesos rápidos</span></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="qa-list">
+      <div class="qa-item" onclick="navigateTo('asistencias')">
+        <div class="qa-icon qa-blue">✅</div>
+        <span class="qa-text">Tomar asistencia</span>
+        <span class="qa-arrow">›</span>
+      </div>
+      <div class="qa-item" onclick="navigateTo('notas')">
+        <div class="qa-icon qa-pink">📝</div>
+        <span class="qa-text">Cargar notas</span>
+        <span class="qa-arrow">›</span>
+      </div>
+      <div class="qa-item" onclick="navigateTo('mis-alumnos')">
+        <div class="qa-icon qa-green">🎓</div>
+        <span class="qa-text">Mis alumnos</span>
+        <span class="qa-arrow">›</span>
+      </div>
+    </div>
+  </div>
+  <div class="sec-head"><span class="sec-title">Mis materias</span></div>
+  <div class="card">
+    <div class="card-body">
+      ${[
+        {name:'Anatomía y Fisiología', career:'Tecnicatura Superior en Enfermería'},
+        {name:'Enfermería Médico-Quirúrgica', career:'Tecnicatura Superior en Enfermería'},
+        {name:'Introducción a la Enfermería', career:'Tecnicatura Superior en Enfermería'},
+      ].map(m=>`<div class="mat-item">
+        <div class="mat-dot"></div>
+        <div class="mat-info">
+          <div class="mat-name">${m.name}</div>
+          <div class="mat-career">${m.career}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── DOCENTE ASISTENCIAS ────────────────────────────────────────────────────
+function renderDocenteAsistencias(){
+  const alumnos = ['Agustina Díaz','Camila Ruiz','Diego Albornoz','Franco Morales','Laura Sánchez','Matías Torres','Nicolás Herrera','Pedro Giménez','Renata Villalba','Sofía Beltrán','Valentina Cruz'];
+  if(!Object.keys(asistState).length){
+    alumnos.forEach(a => { asistState[a] = 'pres'; });
+    asistState['Matías Torres'] = 'aus';
+    asistState['Sofía Beltrán'] = 'aus';
+  }
+  const rows = alumnos.map(a=>`
+    <div class="alumno-row">
+      <div class="alumno-name">${a}</div>
+      <div class="asist-btns">
+        ${['pres','aus','tard','just'].map(s=>`<button class="asist-btn ${s} ${asistState[a]===s?'selected-'+s:''}" onclick="setAsist('${a}','${s}')">${{pres:'✓ Pres.',aus:'✗ Aus.',tard:'↻ Tard.',just:'✉ Just.'}[s]}</button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('content').innerHTML = `
+  <div class="asist-header">
+    <div class="asist-class-name">Farmacología — Asistencia</div>
+    <div class="asist-meta">10:00 a 12:00 · Tecnicatura Superior en Enfermería</div>
+    <div class="asist-controls">
+      <input type="date" class="filter-input" value="2026-05-12" style="width:140px">
+      <button class="btn btn-outline btn-sm" onclick="toast('Historial del mes cargado')">Ver historial del mes</button>
+    </div>
+  </div>
+  <div class="cancel-warning">
+    <span style="font-size:14px;color:#c2410c">▼</span>
+    <span class="cw-text">¿El docente faltó? <a style="color:#c2410c;cursor:pointer" onclick="toast('Clase anulada')">Anular esta clase</a></span>
+  </div>
+  <div id="asist-list">${rows}</div>
+  <div style="margin-top:12px;text-align:center">
+    <button class="btn btn-primary" style="padding:10px 32px;font-size:14px" onclick="saveAsist()">Guardar asistencia</button>
+  </div>`;
+}
+
+function setAsist(alumno, estado){
+  asistState[alumno] = estado;
+  renderDocenteAsistencias();
+}
+
+function saveAsist(){
+  const ausentes = Object.entries(asistState).filter(([,v])=>v==='aus').map(([k])=>k);
+  toast(`✅ Asistencia guardada${ausentes.length?` · ${ausentes.length} ausente(s)`:''}`, 3000);
+}
+
+// ── DOCENTE NOTAS ─────────────────────────────────────────────────────────
+function renderDocenteNotas(){
+  renderNotasAdmin(); // same view
+}
+
+// ── MIS ALUMNOS (docente) ─────────────────────────────────────────────────
+function renderMisAlumnos(){
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:18px;font-weight:800;color:var(--navy)">Mis alumnos</div>
+    <div style="font-size:12px;color:var(--muted)">Anatomía y Fisiología · Lunes 08:00 · T.S. Enfermería</div>
+  </div>
+  <div class="hist-legend">
+    <div class="hl-item"><div class="hl-dot hl-p">P</div>Presente</div>
+    <div class="hl-item"><div class="hl-dot hl-a">A</div>Ausente</div>
+    <div class="hl-item"><div class="hl-dot hl-t">T</div>Tardanza</div>
+    <div class="hl-item"><div class="hl-dot hl-x">X</div>Clase anulada</div>
+  </div>
+  <div class="card" style="padding:0">
+    <div style="padding:8px 14px;background:var(--light);display:flex;align-items:center;justify-content:space-between">
+      <button class="btn btn-outline btn-sm">← Mes anterior</button>
+      <span style="font-weight:700;color:var(--navy)">Mayo 2026</span>
+      <button class="btn btn-outline btn-sm" disabled>Mes siguiente →</button>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Alumno</th><th>4/5</th><th>11/5</th><th>18/5</th><th>25/5</th><th>Ausencias</th></tr></thead>
+      <tbody>
+        ${[
+          {n:'Agustina Díaz',d:['P','P','—','—'],aus:0},
+          {n:'Camila Ruiz',d:['P','P','—','—'],aus:0},
+          {n:'Diego Albornoz',d:['P','P','—','—'],aus:0},
+          {n:'Franco Morales',d:['P','P','—','—'],aus:0},
+          {n:'Laura Sánchez',d:['P','P','—','—'],aus:0},
+          {n:'Matías Torres',d:['A','A','—','—'],aus:2},
+          {n:'Nicolás Herrera',d:['P','P','—','—'],aus:0},
+          {n:'Pedro Giménez',d:['A','P','—','—'],aus:1},
+          {n:'Renata Villalba',d:['P','P','—','—'],aus:0},
+          {n:'Sofía Beltrán',d:['A','P','—','—'],aus:1},
+          {n:'Valentina Cruz',d:['P','P','—','—'],aus:0},
+        ].map(a=>`<tr>
+          <td style="font-weight:500">${a.n}</td>
+          ${a.d.map(d=>`<td style="text-align:center">${d==='P'?'<span class="hl-dot hl-p" style="display:inline-flex;width:22px;height:22px;font-size:11px">P</span>':d==='A'?'<span class="hl-dot hl-a" style="display:inline-flex;width:22px;height:22px;font-size:11px">A</span>':'<span style="color:var(--muted)">—</span>'}</td>`).join('')}
+          <td style="text-align:center">${a.aus>0?`<span class="badge badge-red">${a.aus} aus.</span>`:'<span style="color:var(--muted)">—</span>'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// ── ALUMNO INICIO ─────────────────────────────────────────────────────────
+function renderAlumnoInicio(){
+  document.getElementById('content').innerHTML = `
+  <div class="hero-banner">
+    <div class="hero-sub">Centro de Educación Técnica</div>
+    <div class="hero-title">Hola, alumno</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.65);margin-top:4px;font-style:italic">"No se trata de dónde venís, sino a dónde vas."</div>
+    <button class="btn" style="margin-top:12px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)" onclick="navigateTo('mis-notas')">Ver mis notas →</button>
+  </div>
+  <div class="sec-head"><span class="sec-title">Mis carreras</span></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-body">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--green)"></div>
+          <span style="font-size:13px;font-weight:600">Tecnicatura Superior en Radiología</span>
+        </div>
+        <span class="badge badge-green">Activa</span>
+      </div>
+    </div>
+  </div>
+  <div class="sec-head"><span class="sec-title">Mi asistencia</span></div>
+  <div class="asist-bar-wrap" style="margin-bottom:14px">
+    <div class="ab-label">
+      <span class="ab-pct">71%</span>
+      <span>presencia</span>
+    </div>
+    <div class="ab-bar"><div class="ab-fill" style="width:71%"></div></div>
+    <div class="ab-min">Mínimo requerido: 75% ⚠️ Estás por debajo del límite</div>
+  </div>
+  <div class="sec-head"><span class="sec-title">Últimas notas</span><span class="sec-link" onclick="navigateTo('mis-notas')">Ver todas →</span></div>
+  <div class="card">
+    <div class="card-body" style="padding:0">
+      ${[
+        {mat:'Informática I', tipo:'Final', nota:8, color:'nb-8'},
+        {mat:'Informática I', tipo:'Parcial 3', nota:7, color:'nb-7'},
+        {mat:'Informática I', tipo:'Parcial 2', nota:6, color:'nb-6'},
+        {mat:'Informática I', tipo:'Recup. 1', nota:4, color:'nb-4'},
+        {mat:'Informática I', tipo:'Parcial 1', nota:4, color:'nb-4'},
+      ].map(n=>`<div style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border)">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${n.mat}</div>
+          <div style="font-size:11px;color:var(--muted)">${n.tipo}</div>
+        </div>
+        <span class="nota-badge ${n.color}">${n.nota}</span>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── MIS NOTAS (alumno) ─────────────────────────────────────────────────────
+function renderMisNotas(){
+  const materias1 = [
+    {name:'Anatomofisiología', code:'RAD183', notas:[]},
+    {name:'Física I', code:'RAD182', notas:[]},
+    {name:'Informática I', code:'RAD184', notas:[4,4,6,null,7,null,null,8]},
+    {name:'Introducción a la Radiología', code:'RAD181', notas:[]},
+    {name:'Prácticas Profesionalizantes I', code:'RAD186', notas:[]},
+    {name:'Salud Pública', code:'RAD185', notas:[]},
+  ];
+  const makeNotaCell = (n) => n!=null ? `<span class="nota-badge ${n>=7?'nb-8':n>=6?'nb-7':n>=4?'nb-6':'nb-4'}">${n}</span>` : '<span style="color:var(--muted)">—</span>';
+  const rows1 = materias1.map(m=>`
+    <div class="alumno-nota-row">
+      <div class="an-info">
+        <div class="an-name">${m.name}</div>
+        <div class="an-code">(${m.code})</div>
+      </div>
+      <div class="an-notas">
+        ${m.notas.length ? m.notas.map(n=>makeNotaCell(n)).join('') : '<span style="color:var(--muted);font-size:12px">Sin notas aún</span>'}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:18px;font-weight:800;color:var(--navy)">Mis notas</div>
+    <div style="font-size:12px;color:var(--muted)">alumno primero</div>
+  </div>
+  <div style="border-radius:10px;overflow:hidden;margin-bottom:14px">
+    <div class="carrera-header">
+      <div class="ch-name">Tecnicatura Superior en Radiología</div>
+      <div class="ch-sub">Ingreso: 05/2026</div>
+    </div>
+    <div style="background:var(--white);padding:8px 14px;border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">1er año</span>
+    </div>
+    <div style="background:var(--white)">${rows1}</div>
+    <div style="background:var(--light);padding:8px 14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">2do año</span>
+    </div>
+    <div style="background:var(--white)">
+      ${['Anatomía Radiológica','Física II','Prácticas Profesionalizantes II','Protección Radiológica'].map(m=>`
+      <div class="alumno-nota-row">
+        <div class="an-info"><div class="an-name">${m}</div></div>
+        <div class="an-notas"><span style="color:var(--muted);font-size:12px">Sin notas aún</span></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── MI ASISTENCIA (alumno) ────────────────────────────────────────────────
+function renderMiAsistencia(){
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:18px;font-weight:800;color:var(--navy)">Mi asistencia</div>
+    <div style="font-size:12px;color:var(--muted)">Tecnicatura Superior en Radiología</div>
+  </div>
+  <div class="asist-bar-wrap">
+    <div class="ab-label" style="display:flex;justify-content:space-between;align-items:center">
+      <span class="ab-pct">71%</span>
+      <span style="font-size:12px;color:var(--muted)">presencia general</span>
+    </div>
+    <div class="ab-bar"><div class="ab-fill" style="width:71%"></div></div>
+    <div class="ab-min">⚠️ Mínimo requerido: 75% — Estás por debajo del límite</div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding:0">
+      ${[
+        {mat:'Informática I', pct:68, color:'red'},
+        {mat:'Física I', pct:72, color:'red'},
+        {mat:'Anatomofisiología', pct:81, color:'green'},
+        {mat:'Introducción a la Radiología', pct:87, color:'green'},
+        {mat:'Prácticas Profesionalizantes I', pct:90, color:'green'},
+      ].map(m=>`<div style="padding:12px 14px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;font-weight:600">${m.mat}</span>
+          <span style="font-weight:700;color:${m.color==='red'?'var(--red)':'var(--green)'}">${m.pct}%</span>
+        </div>
+        <div style="height:6px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+          <div style="height:100%;width:${m.pct}%;background:${m.color==='red'?'var(--red)':'var(--green)'};border-radius:99px;transition:width .5s"></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── GENERIC ──────────────────────────────────────────────────────────────
+function renderGeneric(page){
+  const names = {
+    usuarios:'Usuarios', auditoria:'Auditoría',
+  };
+  document.getElementById('content').innerHTML = `
+  <div style="text-align:center;padding:60px 20px">
+    <div style="font-size:48px;margin-bottom:16px">🚧</div>
+    <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px">${names[page]||page}</div>
+    <div style="font-size:13px;color:var(--muted)">Módulo disponible en la versión completa del sistema</div>
+    <button class="btn btn-primary" style="margin-top:20px" onclick="navigateTo('inicio')">← Volver al inicio</button>
+  </div>`;
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function showModal(html){
+  document.getElementById('modal-box').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+// ── MOBILE MENU ───────────────────────────────────────────────────────────
+function toggleMobileMenu(){
+  document.getElementById('mobile-overlay').classList.toggle('show');
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-overlay').classList.remove('show');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function toast(msg, dur=2200){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+// init
+window.onload = () => {};
+</script>
+</body>
+</html>
