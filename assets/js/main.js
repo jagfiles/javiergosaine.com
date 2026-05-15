@@ -3,7 +3,7 @@
 ═══════════════════════════════════════════ */
 const T = {
   es: {
-    'nav.services':'Servicios','nav.sectors':'Rubros','nav.process':'Proceso','nav.cta':'Hablemos',
+    'nav.services':'Servicios','nav.sectors':'Rubros','nav.process':'Proceso','nav.cta':'Contacto',
     'hero.label':'Desarrollo de Software · Argentina · Remoto',
     'hero.h1':'Software que resuelve<br><em>problemas reales</em><br>de tu negocio.',
     'hero.desc':'Desarrollo <strong>sistemas web y aplicaciones a medida</strong> para clínicas, estudios jurídicos, comercios y pymes que quieren dejar de depender de Excel, WhatsApp y procesos manuales.',
